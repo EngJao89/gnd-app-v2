@@ -5,15 +5,17 @@ import Link from "next/link"
 import { AuthScreenShell } from "@/components/auth-screen-shell"
 import { BrandLogo } from "@/components/brand-logo"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import {
   authActionButtonClassName,
   authBackLinkClassName,
+  authCheckboxClassName,
   authInputClassName,
   authLabelClassName,
 } from "@/lib/auth-styles"
 
-export function RegisterScreen() {
+export function SignInScreen() {
   return (
     <AuthScreenShell>
       <div className="flex justify-center">
@@ -25,43 +27,6 @@ export function RegisterScreen() {
         onSubmit={(event) => event.preventDefault()}
       >
         <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="first-name" className={authLabelClassName}>
-              First Name
-            </label>
-            <Input
-              id="first-name"
-              name="firstName"
-              autoComplete="given-name"
-              className={authInputClassName}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="surname" className={authLabelClassName}>
-              Surname
-            </label>
-            <Input
-              id="surname"
-              name="surname"
-              autoComplete="family-name"
-              className={authInputClassName}
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password" className={authLabelClassName}>
-              Password
-            </label>
-            <Input
-              id="password"
-              name="password"
-              type="password"
-              autoComplete="new-password"
-              className={authInputClassName}
-            />
-          </div>
-
           <div className="flex flex-col gap-2">
             <label htmlFor="phone" className={authLabelClassName}>
               Phone number
@@ -75,11 +40,38 @@ export function RegisterScreen() {
               className={authInputClassName}
             />
           </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="password" className={authLabelClassName}>
+              Password
+            </label>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              className={authInputClassName}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="remember-me"
+              className={`${authLabelClassName} font-normal`}
+            >
+              Remember me
+            </label>
+            <Checkbox
+              id="remember-me"
+              name="rememberMe"
+              className={authCheckboxClassName}
+            />
+          </div>
         </div>
 
         <div className="mt-auto flex flex-col gap-4 pt-8">
           <Button type="submit" className={authActionButtonClassName}>
-            Register
+            Log in
           </Button>
 
           <Button asChild variant="link" className={authBackLinkClassName}>

@@ -13,3 +13,12 @@ export const authInputClassName = cn(
 )
 
 export const authLabelClassName = "text-base font-medium text-white"
+
+export const authCheckboxClassName = cn(
+  "size-5 rounded border-2 border-white bg-white",
+  "data-checked:border-white data-checked:bg-white data-checked:text-brand",
+  "focus-visible:border-white focus-visible:ring-white/30"
+)
+
+export const authBackLinkClassName =
+  "text-sm font-normal text-white underline-offset-4 hover:text-white/90"
