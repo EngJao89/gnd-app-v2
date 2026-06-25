@@ -20,8 +20,8 @@ export function GuestScreen() {
           <Link href="/guest/qr-code">QR-Code</Link>
         </Button>
 
-        <Button type="button" className={authActionButtonClassName}>
-          Enter with keyboard
+        <Button asChild className={authActionButtonClassName}>
+          <Link href="/guest/enter-code">Enter with keyboard</Link>
         </Button>
 
         <Button asChild variant="link" className={authBackLinkClassName}>
