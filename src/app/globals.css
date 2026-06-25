@@ -6,6 +6,7 @@
 
 @theme inline {
   --color-brand: #3b9942;
+  --color-brand-bright: #22c55e;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
