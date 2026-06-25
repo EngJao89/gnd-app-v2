@@ -16,8 +16,8 @@ export function GuestScreen() {
       </div>
 
       <div className="flex w-full flex-col gap-4">
-        <Button type="button" className={authActionButtonClassName}>
-          QR-Code
+        <Button asChild className={authActionButtonClassName}>
+          <Link href="/guest/qr-code">QR-Code</Link>
         </Button>
 
         <Button type="button" className={authActionButtonClassName}>
