@@ -15,3 +15,9 @@ export const appSubmitButtonClassName = cn(
   "hover:bg-brand/90",
   "focus-visible:border-brand focus-visible:ring-brand/30"
 )
+
+export const appPaymentButtonClassName = cn(
+  "h-14 w-full rounded-2xl border-2 border-brand/40 bg-white text-muted-foreground shadow-sm",
+  "hover:bg-white hover:text-muted-foreground",
+  "focus-visible:border-brand focus-visible:ring-brand/30"
+)
