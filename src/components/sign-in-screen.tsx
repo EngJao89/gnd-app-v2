@@ -28,15 +28,15 @@ export function SignInScreen() {
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <label htmlFor="phone" className={authLabelClassName}>
-              Phone number
+            <label htmlFor="email" className={authLabelClassName}>
+              Email
             </label>
             <Input
-              id="phone"
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="+61"
+              id="email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="usuario@email.com"
               className={authInputClassName}
             />
           </div>
