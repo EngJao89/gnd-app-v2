@@ -49,6 +49,7 @@ export function ProductListScreen() {
     <AppScreenShell
       location="Belmore, Sydney"
       showCartIcon
+      showLogout
       showCartBadge={cartItemCount > 0}
     >
       <div className="flex flex-1 flex-col px-6 pb-10 pt-6">

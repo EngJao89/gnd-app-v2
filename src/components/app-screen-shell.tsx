@@ -7,6 +7,7 @@ type AppScreenShellProps = {
   location?: string
   showCartIcon?: boolean
   showCartBadge?: boolean
+  showLogout?: boolean
   cartHref?: string
 }
 
@@ -16,6 +17,7 @@ export function AppScreenShell({
   location,
   showCartIcon,
   showCartBadge,
+  showLogout,
   cartHref,
 }: AppScreenShellProps) {
   return (
@@ -24,6 +26,7 @@ export function AppScreenShell({
         location={location}
         showCartIcon={showCartIcon}
         showCartBadge={showCartBadge}
+        showLogout={showLogout}
         cartHref={cartHref}
       />
       {children}
