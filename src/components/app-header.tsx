@@ -1,4 +1,5 @@
 import Image from "next/image"
+import Link from "next/link"
 import { MapPin, ShoppingBasket } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -7,12 +8,16 @@ type AppHeaderProps = {
   className?: string
   location?: string
   showCartIcon?: boolean
+  showCartBadge?: boolean
+  cartHref?: string
 }
 
 export function AppHeader({
   className,
   location,
   showCartIcon,
+  showCartBadge,
+  cartHref = "/cart",
 }: AppHeaderProps) {
   return (
     <header
@@ -38,12 +43,16 @@ export function AppHeader({
       ) : null}
 
       {showCartIcon ? (
-        <div
-          className="ml-auto flex size-10 items-center justify-center rounded-lg border-2 border-white"
-          aria-hidden
+        <Link
+          href={cartHref}
+          className="relative ml-auto flex size-10 items-center justify-center rounded-lg border-2 border-white"
+          aria-label="Open cart"
         >
           <ShoppingBasket className="size-5 text-white" />
-        </div>
+          {showCartBadge ? (
+            <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-red-500" />
+          ) : null}
+        </Link>
       ) : null}
     </header>
   )

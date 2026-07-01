@@ -68,7 +68,7 @@ export function SignInScreen() {
     try {
       await signIn({ email, password })
       toast.success("Login successful!")
-      router.push("/cart")
+      router.push("/products")
     } catch (error) {
       const message = getSignInErrorMessage(error)
 
