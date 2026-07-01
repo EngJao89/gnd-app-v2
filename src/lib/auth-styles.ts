@@ -14,6 +14,8 @@ export const authInputClassName = cn(
 
 export const authLabelClassName = "text-base font-medium text-white"
 
+export const authFieldErrorClassName = "text-red-100"
+
 export const authCheckboxClassName = cn(
   "size-5 rounded border-2 border-white bg-white",
   "data-checked:border-white data-checked:bg-white data-checked:text-brand",

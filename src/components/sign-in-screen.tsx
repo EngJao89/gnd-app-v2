@@ -9,6 +9,11 @@ import { AuthScreenShell } from "@/components/auth-screen-shell"
 import { BrandLogo } from "@/components/brand-logo"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
@@ -19,6 +24,7 @@ import {
   authLabelClassName,
 } from "@/lib/auth-styles"
 import { signIn } from "@/services/auth"
+import { cn } from "@/lib/utils"
 
 export function SignInScreen() {
   const router = useRouter()
@@ -62,11 +68,11 @@ export function SignInScreen() {
         className="mt-10 flex flex-1 flex-col"
         onSubmit={handleSubmit}
       >
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className={authLabelClassName}>
+        <FieldGroup>
+          <Field>
+            <FieldLabel htmlFor="email" className={authLabelClassName}>
               Email
-            </label>
+            </FieldLabel>
             <Input
               id="email"
               name="email"
@@ -77,12 +83,12 @@ export function SignInScreen() {
               disabled={isLoading}
               className={authInputClassName}
             />
-          </div>
+          </Field>
 
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password" className={authLabelClassName}>
+          <Field>
+            <FieldLabel htmlFor="password" className={authLabelClassName}>
               Password
-            </label>
+            </FieldLabel>
             <Input
               id="password"
               name="password"
@@ -92,23 +98,23 @@ export function SignInScreen() {
               disabled={isLoading}
               className={authInputClassName}
             />
-          </div>
+          </Field>
 
-          <div className="flex items-center gap-2">
-            <label
+          <Field orientation="horizontal" className="items-center">
+            <FieldLabel
               htmlFor="remember-me"
-              className={`${authLabelClassName} font-normal`}
+              className={cn(authLabelClassName, "font-normal")}
             >
               Remember me
-            </label>
+            </FieldLabel>
             <Checkbox
               id="remember-me"
               name="rememberMe"
               disabled={isLoading}
               className={authCheckboxClassName}
             />
-          </div>
-        </div>
+          </Field>
+        </FieldGroup>
 
         {errorMessage ? (
           <p
