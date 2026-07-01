@@ -207,7 +207,7 @@ export function RegisterScreen() {
             disabled={isSubmitting}
             className={authActionButtonClassName}
           >
-            {isSubmitting ? "Registering..." : "Register"}
+            {isSubmitting ? "Registering..." : "Register Client"}
           </Button>
 
           <Button asChild variant="link" className={authBackLinkClassName}>
