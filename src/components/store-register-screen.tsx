@@ -9,6 +9,12 @@ import { toast } from "react-toastify"
 
 import { AppScreenShell } from "@/components/app-screen-shell"
 import { Button } from "@/components/ui/button"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { getApiErrorMessage } from "@/lib/api-error"
 import { appBackLinkClassName } from "@/lib/app-styles"
@@ -16,7 +22,6 @@ import { type StoreFormData, storeSchema } from "@/lib/schemas/store"
 import { cn } from "@/lib/utils"
 import { createStore } from "@/services/stores"
 
-const labelClassName = "text-sm font-medium text-foreground"
 const inputClassName =
   "h-11 w-full rounded-lg border border-input bg-white px-3"
 
@@ -126,12 +131,10 @@ export function StoreRegisterScreen() {
           Fill in the store details below.
         </p>
 
-        <div className="mt-6 flex flex-col gap-4">
+        <FieldGroup className="mt-6">
           {fields.map((field) => (
-            <div key={field.name} className="flex flex-col gap-2">
-              <label htmlFor={field.name} className={labelClassName}>
-                {field.label}
-              </label>
+            <Field key={field.name} data-invalid={!!errors[field.name]}>
+              <FieldLabel htmlFor={field.name}>{field.label}</FieldLabel>
               <Input
                 id={field.name}
                 type="text"
@@ -146,14 +149,10 @@ export function StoreRegisterScreen() {
                 )}
                 {...register(field.name)}
               />
-              {errors[field.name] ? (
-                <p className="text-sm text-red-600">
-                  {errors[field.name]?.message}
-                </p>
-              ) : null}
-            </div>
+              <FieldError errors={[errors[field.name]]} />
+            </Field>
           ))}
-        </div>
+        </FieldGroup>
 
         {errorMessage ? (
           <p

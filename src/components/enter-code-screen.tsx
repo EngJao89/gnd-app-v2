@@ -4,6 +4,11 @@ import Link from "next/link"
 
 import { AppScreenShell } from "@/components/app-screen-shell"
 import { Button } from "@/components/ui/button"
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   appBackLinkClassName,
@@ -22,19 +27,24 @@ export function EnterCodeScreen() {
           Enter code below
         </p>
 
-        <div className="mt-8 flex w-full max-w-sm flex-col gap-6">
-          <Input
-            id="code"
-            name="code"
-            autoComplete="off"
-            autoCapitalize="characters"
-            className={appInputClassName}
-          />
+        <FieldGroup className="mt-8 w-full max-w-sm gap-6">
+          <Field>
+            <FieldLabel htmlFor="code" className="sr-only">
+              Code
+            </FieldLabel>
+            <Input
+              id="code"
+              name="code"
+              autoComplete="off"
+              autoCapitalize="characters"
+              className={appInputClassName}
+            />
+          </Field>
 
           <Button type="submit" className={appSubmitButtonClassName}>
             Submit
           </Button>
-        </div>
+        </FieldGroup>
 
         <Button asChild variant="link" className={`mt-auto ${appBackLinkClassName}`}>
           <Link href="/guest">Back</Link>

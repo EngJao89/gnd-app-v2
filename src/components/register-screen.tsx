@@ -10,11 +10,18 @@ import { toast } from "react-toastify"
 import { AuthScreenShell } from "@/components/auth-screen-shell"
 import { BrandLogo } from "@/components/brand-logo"
 import { Button } from "@/components/ui/button"
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   authActionButtonClassName,
   authBackLinkClassName,
+  authFieldErrorClassName,
   authInputClassName,
   authLabelClassName,
 } from "@/lib/auth-styles"
@@ -24,6 +31,53 @@ import {
 } from "@/lib/schemas/register"
 import { cn } from "@/lib/utils"
 import { createUser } from "@/services/users"
+
+const fields: {
+  name: keyof RegisterFormData
+  id: string
+  label: string
+  type: string
+  autoComplete?: string
+  placeholder?: string
+}[] = [
+  {
+    name: "firstName",
+    id: "first-name",
+    label: "First Name",
+    type: "text",
+    autoComplete: "given-name",
+  },
+  {
+    name: "surname",
+    id: "surname",
+    label: "Surname",
+    type: "text",
+    autoComplete: "family-name",
+  },
+  {
+    name: "email",
+    id: "email",
+    label: "Email",
+    type: "email",
+    autoComplete: "email",
+    placeholder: "usuario@email.com",
+  },
+  {
+    name: "password",
+    id: "password",
+    label: "Password",
+    type: "password",
+    autoComplete: "new-password",
+  },
+  {
+    name: "phone",
+    id: "phone",
+    label: "Phone number",
+    type: "tel",
+    autoComplete: "tel",
+    placeholder: "+61",
+  },
+]
 
 export function RegisterScreen() {
   const router = useRouter()
@@ -79,118 +133,32 @@ export function RegisterScreen() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <div className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="first-name" className={authLabelClassName}>
-              First Name
-            </label>
-            <Input
-              id="first-name"
-              type="text"
-              autoComplete="given-name"
-              aria-invalid={!!errors.firstName}
-              disabled={isSubmitting}
-              className={cn(
-                authInputClassName,
-                errors.firstName && "border-red-300"
-              )}
-              {...register("firstName")}
-            />
-            {errors.firstName ? (
-              <p className="text-sm font-medium text-red-100">
-                {errors.firstName.message}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="surname" className={authLabelClassName}>
-              Surname
-            </label>
-            <Input
-              id="surname"
-              type="text"
-              autoComplete="family-name"
-              aria-invalid={!!errors.surname}
-              disabled={isSubmitting}
-              className={cn(
-                authInputClassName,
-                errors.surname && "border-red-300"
-              )}
-              {...register("surname")}
-            />
-            {errors.surname ? (
-              <p className="text-sm font-medium text-red-100">
-                {errors.surname.message}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email" className={authLabelClassName}>
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="usuario@email.com"
-              aria-invalid={!!errors.email}
-              disabled={isSubmitting}
-              className={cn(authInputClassName, errors.email && "border-red-300")}
-              {...register("email")}
-            />
-            {errors.email ? (
-              <p className="text-sm font-medium text-red-100">
-                {errors.email.message}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password" className={authLabelClassName}>
-              Password
-            </label>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              aria-invalid={!!errors.password}
-              disabled={isSubmitting}
-              className={cn(
-                authInputClassName,
-                errors.password && "border-red-300"
-              )}
-              {...register("password")}
-            />
-            {errors.password ? (
-              <p className="text-sm font-medium text-red-100">
-                {errors.password.message}
-              </p>
-            ) : null}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="phone" className={authLabelClassName}>
-              Phone number
-            </label>
-            <Input
-              id="phone"
-              type="tel"
-              autoComplete="tel"
-              placeholder="+61"
-              aria-invalid={!!errors.phone}
-              disabled={isSubmitting}
-              className={cn(authInputClassName, errors.phone && "border-red-300")}
-              {...register("phone")}
-            />
-            {errors.phone ? (
-              <p className="text-sm font-medium text-red-100">
-                {errors.phone.message}
-              </p>
-            ) : null}
-          </div>
-        </div>
+        <FieldGroup>
+          {fields.map((field) => (
+            <Field key={field.name} data-invalid={!!errors[field.name]}>
+              <FieldLabel htmlFor={field.id} className={authLabelClassName}>
+                {field.label}
+              </FieldLabel>
+              <Input
+                id={field.id}
+                type={field.type}
+                autoComplete={field.autoComplete}
+                placeholder={field.placeholder}
+                aria-invalid={!!errors[field.name]}
+                disabled={isSubmitting}
+                className={cn(
+                  authInputClassName,
+                  errors[field.name] && "border-red-300"
+                )}
+                {...register(field.name)}
+              />
+              <FieldError
+                className={authFieldErrorClassName}
+                errors={[errors[field.name]]}
+              />
+            </Field>
+          ))}
+        </FieldGroup>
 
         {errorMessage ? (
           <p
