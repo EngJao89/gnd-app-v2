@@ -1,14 +1,20 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
-import { MapPin, ShoppingBasket } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { LogOut, MapPin, ShoppingBasket } from "lucide-react"
+import { toast } from "react-toastify"
 
 import { cn } from "@/lib/utils"
+import { signOut } from "@/services/auth"
 
 type AppHeaderProps = {
   className?: string
   location?: string
   showCartIcon?: boolean
   showCartBadge?: boolean
+  showLogout?: boolean
   cartHref?: string
 }
 
@@ -17,8 +23,17 @@ export function AppHeader({
   location,
   showCartIcon,
   showCartBadge,
+  showLogout,
   cartHref = "/cart",
 }: AppHeaderProps) {
+  const router = useRouter()
+
+  function handleLogout() {
+    signOut()
+    toast.success("Logged out successfully!")
+    router.push("/")
+  }
+
   return (
     <header
       className={cn(
@@ -42,17 +57,32 @@ export function AppHeader({
         </div>
       ) : null}
 
-      {showCartIcon ? (
-        <Link
-          href={cartHref}
-          className="relative ml-auto flex size-10 items-center justify-center rounded-lg border-2 border-white"
-          aria-label="Open cart"
-        >
-          <ShoppingBasket className="size-5 text-white" />
-          {showCartBadge ? (
-            <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-red-500" />
+      {showCartIcon || showLogout ? (
+        <div className="ml-auto flex items-center gap-2">
+          {showCartIcon ? (
+            <Link
+              href={cartHref}
+              className="relative flex size-10 items-center justify-center rounded-lg border-2 border-white"
+              aria-label="Open cart"
+            >
+              <ShoppingBasket className="size-5 text-white" />
+              {showCartBadge ? (
+                <span className="absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full bg-red-500" />
+              ) : null}
+            </Link>
           ) : null}
-        </Link>
+
+          {showLogout ? (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex size-10 items-center justify-center rounded-lg border-2 border-white text-white transition-colors hover:bg-white/10"
+              aria-label="Log out"
+            >
+              <LogOut className="size-5" />
+            </button>
+          ) : null}
+        </div>
       ) : null}
     </header>
   )
