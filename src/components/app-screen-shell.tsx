@@ -6,6 +6,8 @@ type AppScreenShellProps = {
   className?: string
   location?: string
   showCartIcon?: boolean
+  showCartBadge?: boolean
+  cartHref?: string
 }
 
 export function AppScreenShell({
@@ -13,10 +15,17 @@ export function AppScreenShell({
   className,
   location,
   showCartIcon,
+  showCartBadge,
+  cartHref,
 }: AppScreenShellProps) {
   return (
     <div className={cn("flex min-h-svh w-full flex-col bg-white", className)}>
-      <AppHeader location={location} showCartIcon={showCartIcon} />
+      <AppHeader
+        location={location}
+        showCartIcon={showCartIcon}
+        showCartBadge={showCartBadge}
+        cartHref={cartHref}
+      />
       {children}
     </div>
   )

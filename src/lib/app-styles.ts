@@ -21,3 +21,14 @@ export const appPaymentButtonClassName = cn(
   "hover:bg-white hover:text-muted-foreground",
   "focus-visible:border-brand focus-visible:ring-brand/30"
 )
+
+export const appSearchInputClassName = cn(
+  "h-12 rounded-full border-2 border-brand bg-white pr-12 shadow-sm",
+  "focus-visible:border-brand focus-visible:ring-brand/30"
+)
+
+export const appOutlineButtonClassName = cn(
+  "h-12 w-full rounded-full border-2 border-brand bg-white text-base font-medium text-foreground shadow-sm",
+  "hover:bg-white",
+  "focus-visible:border-brand focus-visible:ring-brand/30"
+)
