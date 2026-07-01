@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { type FormEvent, useState } from "react"
-import { isAxiosError } from "axios"
 import { toast } from "react-toastify"
 
 import { AuthScreenShell } from "@/components/auth-screen-shell"
@@ -11,6 +10,7 @@ import { BrandLogo } from "@/components/brand-logo"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
+import { getApiErrorMessage } from "@/lib/api-error"
 import {
   authActionButtonClassName,
   authBackLinkClassName,
@@ -19,36 +19,6 @@ import {
   authLabelClassName,
 } from "@/lib/auth-styles"
 import { signIn } from "@/services/auth"
-
-function getSignInErrorMessage(error: unknown): string {
-  if (isAxiosError(error)) {
-    const data = error.response?.data
-
-    if (typeof data === "string" && data.trim()) {
-      return data
-    }
-
-    if (data && typeof data === "object" && "message" in data) {
-      const message = data.message
-
-      if (typeof message === "string" && message.trim()) {
-        return message
-      }
-
-      if (Array.isArray(message)) {
-        return message.join(", ")
-      }
-    }
-
-    if (error.code === "ERR_NETWORK") {
-      return "Could not connect to the server. Please try again."
-    }
-
-    return "Invalid email or password."
-  }
-
-  return "Failed to sign in. Please try again."
-}
 
 export function SignInScreen() {
   const router = useRouter()
@@ -70,7 +40,10 @@ export function SignInScreen() {
       toast.success("Login successful!")
       router.push("/products")
     } catch (error) {
-      const message = getSignInErrorMessage(error)
+      const message = getApiErrorMessage(
+        error,
+        "Invalid email or password."
+      )
 
       setErrorMessage(message)
       toast.error(message)
