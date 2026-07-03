@@ -25,6 +25,10 @@ export function LandingScreen() {
           <Link href="/stores/register">Register Store</Link>
         </Button>
 
+        <Button asChild className={authActionButtonClassName}>
+          <Link href="/stores/sign-in">Store Sign in</Link>
+        </Button>
+
         <Button
           asChild
           variant="link"
