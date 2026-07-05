@@ -3,7 +3,7 @@
 import { Minus, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import type { Product } from "@/data/products"
+import type { Product } from "@/types/product"
 
 type ProductCardProps = {
   product: Product

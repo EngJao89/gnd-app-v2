@@ -5,6 +5,8 @@ type AppScreenShellProps = {
   children: React.ReactNode
   className?: string
   location?: string
+  showAddProduct?: boolean
+  addProductHref?: string
   showCartIcon?: boolean
   showCartBadge?: boolean
   showLogout?: boolean
@@ -15,6 +17,8 @@ export function AppScreenShell({
   children,
   className,
   location,
+  showAddProduct,
+  addProductHref,
   showCartIcon,
   showCartBadge,
   showLogout,
@@ -24,6 +28,8 @@ export function AppScreenShell({
     <div className={cn("flex min-h-svh w-full flex-col bg-white", className)}>
       <AppHeader
         location={location}
+        showAddProduct={showAddProduct}
+        addProductHref={addProductHref}
         showCartIcon={showCartIcon}
         showCartBadge={showCartBadge}
         showLogout={showLogout}
