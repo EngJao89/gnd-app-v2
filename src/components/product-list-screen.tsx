@@ -4,6 +4,7 @@ import Link from "next/link"
 import { Search } from "lucide-react"
 import { useMemo, useState } from "react"
 
+import { useIsStoreSession } from "@/hooks/use-store-session"
 import { AppScreenShell } from "@/components/app-screen-shell"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
@@ -17,6 +18,7 @@ import {
 } from "@/lib/app-styles"
 
 export function ProductListScreen() {
+  const isStore = useIsStoreSession()
   const [search, setSearch] = useState("")
   const [quantities, setQuantities] = useState<Record<string, number>>({
     "shapes-chicken": 1,
@@ -49,7 +51,7 @@ export function ProductListScreen() {
   return (
     <AppScreenShell
       location="Belmore, Sydney"
-      showAddProduct
+      showAddProduct={isStore}
       showCartIcon
       showLogout
       showCartBadge={cartItemCount > 0}
