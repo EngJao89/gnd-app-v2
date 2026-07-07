@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const storeSignInSchema = z.object({
-  cnpj: z.string().min(1, "CNPJ is required"),
+  email: z.email("Invalid email"),
   password: z.string().min(1, "Password is required"),
 })
 

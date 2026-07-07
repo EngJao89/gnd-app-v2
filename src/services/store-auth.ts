@@ -2,7 +2,7 @@ import { api } from "@/lib/axios"
 import { setAuthRole, setAuthToken } from "@/lib/auth-session"
 
 export type StoreSignInRequest = {
-  cnpj: string
+  email: string
   password: string
 }
 

@@ -35,7 +35,7 @@ export function StoreSignInScreen() {
   const form = useForm<StoreSignInFormData>({
     resolver: zodResolver(storeSignInSchema),
     defaultValues: {
-      cnpj: "",
+      email: "",
       password: "",
     },
   })
@@ -54,7 +54,7 @@ export function StoreSignInScreen() {
     } catch (error) {
       const message = getApiErrorMessage(
         error,
-        "Invalid CNPJ or password."
+        "Invalid email or password."
       )
 
       form.setError("root", { message })
@@ -76,11 +76,12 @@ export function StoreSignInScreen() {
         <FieldGroup>
           <FormFieldInput
             control={control}
-            name="cnpj"
-            id="cnpj"
-            label="CNPJ"
-            autoComplete="off"
-            placeholder="12.345.678/0001-90"
+            name="email"
+            id="email"
+            label="Email"
+            type="email"
+            autoComplete="email"
+            placeholder="loja@email.com"
             disabled={isSubmitting}
             labelClassName={authLabelClassName}
             inputClassName={authInputClassName}
