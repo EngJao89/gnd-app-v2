@@ -9,12 +9,16 @@ export const authActionButtonClassName = cn(
 export const authInputClassName = cn(
   "h-12 rounded-full border-0 bg-white px-4 text-base text-foreground shadow-md",
   "placeholder:text-muted-foreground",
-  "focus-visible:border-brand focus-visible:ring-brand/30"
+  "focus-visible:border-brand focus-visible:ring-brand/30",
+  "aria-invalid:border-destructive aria-invalid:ring-destructive/20"
 )
 
 export const authLabelClassName = "text-base font-medium text-white"
 
 export const authFieldErrorClassName = "text-red-100"
+
+export const authFormRootErrorClassName =
+  "rounded-2xl border border-red-200 bg-white px-4 py-3 text-center text-red-600"
 
 export const authCheckboxClassName = cn(
   "size-5 rounded border-2 border-white bg-white",

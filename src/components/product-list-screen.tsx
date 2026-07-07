@@ -7,6 +7,7 @@ import { useMemo, useState } from "react"
 import { AppScreenShell } from "@/components/app-screen-shell"
 import { ProductCard } from "@/components/product-card"
 import { Button } from "@/components/ui/button"
+import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { products } from "@/data/products"
 import {
@@ -54,19 +55,25 @@ export function ProductListScreen() {
       showCartBadge={cartItemCount > 0}
     >
       <div className="flex flex-1 flex-col px-6 pb-10 pt-6">
-        <div className="relative">
-          <Input
-            type="search"
-            placeholder="Search products"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
-            className={appSearchInputClassName}
-          />
-          <Search
-            className="pointer-events-none absolute top-1/2 right-4 size-5 -translate-y-1/2 text-brand"
-            aria-hidden
-          />
-        </div>
+        <Field>
+          <FieldLabel htmlFor="search-products" className="sr-only">
+            Search products
+          </FieldLabel>
+          <div className="relative">
+            <Input
+              id="search-products"
+              type="search"
+              placeholder="Search products"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              className={appSearchInputClassName}
+            />
+            <Search
+              className="pointer-events-none absolute top-1/2 right-4 size-5 -translate-y-1/2 text-brand"
+              aria-hidden
+            />
+          </div>
+        </Field>
 
         <Button type="button" className={`mt-4 ${appOutlineButtonClassName}`}>
           Scan with barcode
