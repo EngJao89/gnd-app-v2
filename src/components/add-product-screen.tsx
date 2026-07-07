@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
+import { useRequireStoreSession } from "@/hooks/use-store-session"
 import { AppScreenShell } from "@/components/app-screen-shell"
 import {
   FormFieldInput,
@@ -25,6 +26,7 @@ import { createProduct } from "@/services/products"
 
 export function AddProductScreen() {
   const router = useRouter()
+  const isAuthorized = useRequireStoreSession()
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -62,6 +64,10 @@ export function AddProductScreen() {
       form.setError("root", { message })
       toast.error(message)
     }
+  }
+
+  if (!isAuthorized) {
+    return null
   }
 
   return (

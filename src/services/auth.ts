@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios"
-import { clearAuthSession, setAuthToken } from "@/lib/auth-session"
+import { clearAuthSession, setAuthRole, setAuthToken } from "@/lib/auth-session"
 
 export type SignInRequest = {
   email: string
@@ -22,6 +22,7 @@ export async function signIn(data: SignInRequest) {
 
   if (token) {
     setAuthToken(token)
+    setAuthRole("client")
   }
 
   return responseData

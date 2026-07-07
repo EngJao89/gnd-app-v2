@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios"
-import { setAuthToken } from "@/lib/auth-session"
+import { setAuthRole, setAuthToken } from "@/lib/auth-session"
 
 export type StoreSignInRequest = {
   cnpj: string
@@ -25,6 +25,7 @@ export async function storeSignIn(data: StoreSignInRequest) {
 
   if (token) {
     setAuthToken(token)
+    setAuthRole("store")
   }
 
   return responseData
