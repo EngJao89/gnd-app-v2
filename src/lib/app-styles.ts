@@ -7,7 +7,8 @@ export const GUEST_QR_CODE = "JMDW3-NND89-YCBDJ-JD787"
 
 export const appInputClassName = cn(
   "h-12 w-full rounded-full border-2 border-brand bg-white px-4 text-base shadow-md",
-  "focus-visible:border-brand focus-visible:ring-brand/30"
+  "focus-visible:border-brand focus-visible:ring-brand/30",
+  "aria-invalid:border-destructive aria-invalid:ring-destructive/20"
 )
 
 export const appSubmitButtonClassName = cn(
@@ -32,3 +33,11 @@ export const appOutlineButtonClassName = cn(
   "hover:bg-white",
   "focus-visible:border-brand focus-visible:ring-brand/30"
 )
+
+export const appFormInputClassName = cn(
+  "h-11 w-full rounded-lg border border-input bg-white px-3",
+  "aria-invalid:border-destructive aria-invalid:ring-destructive/20"
+)
+
+export const appFormRootErrorClassName =
+  "rounded-lg border border-destructive/20 bg-destructive/5 px-4 py-3"

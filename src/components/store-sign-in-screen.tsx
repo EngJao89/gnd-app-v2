@@ -3,25 +3,23 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import { AuthScreenShell } from "@/components/auth-screen-shell"
 import { BrandLogo } from "@/components/brand-logo"
-import { Button } from "@/components/ui/button"
 import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+  FormFieldInput,
+  FormRootError,
+} from "@/components/form/form-field-input"
+import { Button } from "@/components/ui/button"
+import { FieldGroup } from "@/components/ui/field"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   authActionButtonClassName,
   authBackLinkClassName,
   authFieldErrorClassName,
+  authFormRootErrorClassName,
   authInputClassName,
   authLabelClassName,
 } from "@/lib/auth-styles"
@@ -29,18 +27,12 @@ import {
   type StoreSignInFormData,
   storeSignInSchema,
 } from "@/lib/schemas/store-sign-in"
-import { cn } from "@/lib/utils"
 import { storeSignIn } from "@/services/store-auth"
 
 export function StoreSignInScreen() {
   const router = useRouter()
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<StoreSignInFormData>({
+  const form = useForm<StoreSignInFormData>({
     resolver: zodResolver(storeSignInSchema),
     defaultValues: {
       cnpj: "",
@@ -48,9 +40,13 @@ export function StoreSignInScreen() {
     },
   })
 
-  async function onSubmit(data: StoreSignInFormData) {
-    setErrorMessage(null)
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = form
 
+  async function onSubmit(data: StoreSignInFormData) {
     try {
       await storeSignIn(data)
       toast.success("Store login successful!")
@@ -61,7 +57,7 @@ export function StoreSignInScreen() {
         "Invalid CNPJ or password."
       )
 
-      setErrorMessage(message)
+      form.setError("root", { message })
       toast.error(message)
     }
   }
@@ -78,60 +74,37 @@ export function StoreSignInScreen() {
         noValidate
       >
         <FieldGroup>
-          <Field data-invalid={!!errors.cnpj}>
-            <FieldLabel htmlFor="cnpj" className={authLabelClassName}>
-              CNPJ
-            </FieldLabel>
-            <Input
-              id="cnpj"
-              type="text"
-              autoComplete="off"
-              placeholder="12.345.678/0001-90"
-              aria-invalid={!!errors.cnpj}
-              disabled={isSubmitting}
-              className={cn(
-                authInputClassName,
-                errors.cnpj && "border-red-300"
-              )}
-              {...register("cnpj")}
-            />
-            <FieldError
-              className={authFieldErrorClassName}
-              errors={[errors.cnpj]}
-            />
-          </Field>
+          <FormFieldInput
+            control={control}
+            name="cnpj"
+            id="cnpj"
+            label="CNPJ"
+            autoComplete="off"
+            placeholder="12.345.678/0001-90"
+            disabled={isSubmitting}
+            labelClassName={authLabelClassName}
+            inputClassName={authInputClassName}
+            errorClassName={authFieldErrorClassName}
+          />
 
-          <Field data-invalid={!!errors.password}>
-            <FieldLabel htmlFor="password" className={authLabelClassName}>
-              Password
-            </FieldLabel>
-            <Input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              aria-invalid={!!errors.password}
-              disabled={isSubmitting}
-              className={cn(
-                authInputClassName,
-                errors.password && "border-red-300"
-              )}
-              {...register("password")}
-            />
-            <FieldError
-              className={authFieldErrorClassName}
-              errors={[errors.password]}
-            />
-          </Field>
+          <FormFieldInput
+            control={control}
+            name="password"
+            id="password"
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            disabled={isSubmitting}
+            labelClassName={authLabelClassName}
+            inputClassName={authInputClassName}
+            errorClassName={authFieldErrorClassName}
+          />
         </FieldGroup>
 
-        {errorMessage ? (
-          <p
-            role="alert"
-            className="mt-4 rounded-2xl border border-red-200 bg-white px-4 py-3 text-center text-sm font-medium text-red-600"
-          >
-            {errorMessage}
-          </p>
-        ) : null}
+        <FormRootError
+          message={errors.root?.message}
+          className={authFormRootErrorClassName}
+        />
 
         <div className="mt-auto flex flex-col gap-4 pt-8">
           <Button

@@ -4,11 +4,7 @@ import Link from "next/link"
 
 import { AppScreenShell } from "@/components/app-screen-shell"
 import { Button } from "@/components/ui/button"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   appBackLinkClassName,

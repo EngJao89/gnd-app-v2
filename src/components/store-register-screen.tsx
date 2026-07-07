@@ -3,27 +3,24 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import { AppScreenShell } from "@/components/app-screen-shell"
-import { Button } from "@/components/ui/button"
 import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+  FormFieldInput,
+  FormRootError,
+} from "@/components/form/form-field-input"
+import { Button } from "@/components/ui/button"
+import { FieldGroup } from "@/components/ui/field"
 import { getApiErrorMessage } from "@/lib/api-error"
-import { appBackLinkClassName } from "@/lib/app-styles"
+import {
+  appBackLinkClassName,
+  appFormInputClassName,
+  appFormRootErrorClassName,
+} from "@/lib/app-styles"
 import { type StoreFormData, storeSchema } from "@/lib/schemas/store"
-import { cn } from "@/lib/utils"
 import { createStore } from "@/services/stores"
-
-const inputClassName =
-  "h-11 w-full rounded-lg border border-input bg-white px-3"
 
 const fields: {
   name: keyof StoreFormData
@@ -75,13 +72,8 @@ const fields: {
 
 export function StoreRegisterScreen() {
   const router = useRouter()
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<StoreFormData>({
+  const form = useForm<StoreFormData>({
     resolver: zodResolver(storeSchema),
     defaultValues: {
       name: "",
@@ -97,9 +89,13 @@ export function StoreRegisterScreen() {
     },
   })
 
-  async function onSubmit(data: StoreFormData) {
-    setErrorMessage(null)
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = form
 
+  async function onSubmit(data: StoreFormData) {
     try {
       await createStore({
         ...data,
@@ -114,7 +110,7 @@ export function StoreRegisterScreen() {
         "Failed to register store. Please try again."
       )
 
-      setErrorMessage(message)
+      form.setError("root", { message })
       toast.error(message)
     }
   }
@@ -133,35 +129,25 @@ export function StoreRegisterScreen() {
 
         <FieldGroup className="mt-6">
           {fields.map((field) => (
-            <Field key={field.name} data-invalid={!!errors[field.name]}>
-              <FieldLabel htmlFor={field.name}>{field.label}</FieldLabel>
-              <Input
-                id={field.name}
-                type="text"
-                autoComplete={field.autoComplete}
-                placeholder={field.placeholder}
-                maxLength={field.maxLength}
-                aria-invalid={!!errors[field.name]}
-                disabled={isSubmitting}
-                className={cn(
-                  inputClassName,
-                  errors[field.name] && "border-red-500"
-                )}
-                {...register(field.name)}
-              />
-              <FieldError errors={[errors[field.name]]} />
-            </Field>
+            <FormFieldInput
+              key={field.name}
+              control={control}
+              name={field.name}
+              id={field.name}
+              label={field.label}
+              autoComplete={field.autoComplete}
+              placeholder={field.placeholder}
+              maxLength={field.maxLength}
+              disabled={isSubmitting}
+              inputClassName={appFormInputClassName}
+            />
           ))}
         </FieldGroup>
 
-        {errorMessage ? (
-          <p
-            role="alert"
-            className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600"
-          >
-            {errorMessage}
-          </p>
-        ) : null}
+        <FormRootError
+          message={errors.root?.message}
+          className={appFormRootErrorClassName}
+        />
 
         <div className="mt-8 flex flex-col gap-4">
           <Button type="submit" disabled={isSubmitting} className="h-11">

@@ -3,25 +3,23 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import { AuthScreenShell } from "@/components/auth-screen-shell"
 import { BrandLogo } from "@/components/brand-logo"
-import { Button } from "@/components/ui/button"
 import {
-  Field,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+  FormFieldInput,
+  FormRootError,
+} from "@/components/form/form-field-input"
+import { Button } from "@/components/ui/button"
+import { FieldGroup } from "@/components/ui/field"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   authActionButtonClassName,
   authBackLinkClassName,
   authFieldErrorClassName,
+  authFormRootErrorClassName,
   authInputClassName,
   authLabelClassName,
 } from "@/lib/auth-styles"
@@ -29,7 +27,6 @@ import {
   type RegisterFormData,
   registerSchema,
 } from "@/lib/schemas/register"
-import { cn } from "@/lib/utils"
 import { createUser } from "@/services/users"
 
 const fields: {
@@ -81,13 +78,8 @@ const fields: {
 
 export function RegisterScreen() {
   const router = useRouter()
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<RegisterFormData>({
+  const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       firstName: "",
@@ -98,9 +90,13 @@ export function RegisterScreen() {
     },
   })
 
-  async function onSubmit(data: RegisterFormData) {
-    setErrorMessage(null)
+  const {
+    control,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = form
 
+  async function onSubmit(data: RegisterFormData) {
     try {
       await createUser({
         name: `${data.firstName} ${data.surname}`.trim(),
@@ -117,7 +113,7 @@ export function RegisterScreen() {
         "Failed to register. Please try again."
       )
 
-      setErrorMessage(message)
+      form.setError("root", { message })
       toast.error(message)
     }
   }
@@ -135,39 +131,27 @@ export function RegisterScreen() {
       >
         <FieldGroup>
           {fields.map((field) => (
-            <Field key={field.name} data-invalid={!!errors[field.name]}>
-              <FieldLabel htmlFor={field.id} className={authLabelClassName}>
-                {field.label}
-              </FieldLabel>
-              <Input
-                id={field.id}
-                type={field.type}
-                autoComplete={field.autoComplete}
-                placeholder={field.placeholder}
-                aria-invalid={!!errors[field.name]}
-                disabled={isSubmitting}
-                className={cn(
-                  authInputClassName,
-                  errors[field.name] && "border-red-300"
-                )}
-                {...register(field.name)}
-              />
-              <FieldError
-                className={authFieldErrorClassName}
-                errors={[errors[field.name]]}
-              />
-            </Field>
+            <FormFieldInput
+              key={field.name}
+              control={control}
+              name={field.name}
+              id={field.id}
+              label={field.label}
+              type={field.type}
+              autoComplete={field.autoComplete}
+              placeholder={field.placeholder}
+              disabled={isSubmitting}
+              labelClassName={authLabelClassName}
+              inputClassName={authInputClassName}
+              errorClassName={authFieldErrorClassName}
+            />
           ))}
         </FieldGroup>
 
-        {errorMessage ? (
-          <p
-            role="alert"
-            className="mt-4 rounded-2xl border border-red-200 bg-white px-4 py-3 text-center text-sm font-medium text-red-600"
-          >
-            {errorMessage}
-          </p>
-        ) : null}
+        <FormRootError
+          message={errors.root?.message}
+          className={authFormRootErrorClassName}
+        />
 
         <div className="mt-auto flex flex-col gap-4 pt-8">
           <Button
