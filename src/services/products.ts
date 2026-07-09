@@ -1,7 +1,21 @@
 import { api } from "@/lib/axios"
+import { getAuthToken } from "@/lib/auth-session"
 import type { CreateProductRequest, Product } from "@/types/product"
+import { getStoreMe } from "@/services/store-auth"
 
 export async function createProduct(data: CreateProductRequest) {
+  const token = getAuthToken()
+
+  if (!token) {
+    throw new Error("Store authentication is required to add products.")
+  }
+
+  const store = await getStoreMe()
+
+  if (!store.id) {
+    throw new Error("Could not identify the authenticated store.")
+  }
+
   const formData = new FormData()
 
   formData.append("name", data.name)
@@ -12,15 +26,9 @@ export async function createProduct(data: CreateProductRequest) {
   formData.append("image", data.image)
 
   const { data: responseData } = await api.post<Product>("products", formData, {
-    transformRequest: [
-      (data, headers) => {
-        if (data instanceof FormData) {
-          delete headers["Content-Type"]
-        }
-
-        return data
-      },
-    ],
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
 
   return responseData

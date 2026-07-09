@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { isAxiosError } from "axios"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
@@ -73,6 +74,10 @@ export function AddProductScreen() {
 
       form.setError("root", { message })
       toast.error(message)
+
+      if (isAxiosError(error) && error.response?.status === 401) {
+        router.replace("/stores/sign-in")
+      }
     }
   }
 
