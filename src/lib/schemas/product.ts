@@ -1,5 +1,9 @@
 import { z } from "zod"
 
+const imageFileSchema = z
+  .custom<FileList>((value) => value instanceof FileList, "Image is required")
+  .refine((files) => files.length > 0, "Image is required")
+
 export const productSchema = z.object({
   name: z.string().min(1, "Product name is required"),
   price: z
@@ -8,9 +12,10 @@ export const productSchema = z.object({
     .refine((value) => !Number.isNaN(Number(value)) && Number(value) > 0, {
       message: "Price must be greater than zero",
     }),
-  imageColor: z
-    .string()
-    .regex(/^#[0-9A-Fa-f]{6}$/, "Color must be a valid hex code (e.g. #4a2c6e)"),
+  description: z.string().min(1, "Description is required"),
+  brand: z.string().min(1, "Brand is required"),
+  sector: z.string().min(1, "Sector is required"),
+  image: imageFileSchema,
 })
 
 export type ProductFormData = z.infer<typeof productSchema>
