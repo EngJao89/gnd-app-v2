@@ -3,19 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useEffect, useMemo } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
 import { useRequireStoreSession } from "@/hooks/use-store-session"
 import { AppScreenShell } from "@/components/app-screen-shell"
 import {
+  FormFieldFile,
   FormFieldInput,
+  FormFieldTextarea,
   FormRootError,
 } from "@/components/form/form-field-input"
 import { Button } from "@/components/ui/button"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { FieldGroup } from "@/components/ui/field"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   appBackLinkClassName,
@@ -23,7 +23,6 @@ import {
   appFormRootErrorClassName,
 } from "@/lib/app-styles"
 import { type ProductFormData, productSchema } from "@/lib/schemas/product"
-import { cn } from "@/lib/utils"
 import { createProduct } from "@/services/products"
 
 export function AddProductScreen() {
@@ -44,28 +43,8 @@ export function AddProductScreen() {
   const {
     control,
     handleSubmit,
-    watch,
     formState: { isSubmitting, errors },
   } = form
-
-  const imageFiles = watch("image")
-  const imagePreviewUrl = useMemo(() => {
-    const file = imageFiles?.[0]
-
-    if (!file) {
-      return null
-    }
-
-    return URL.createObjectURL(file)
-  }, [imageFiles])
-
-  useEffect(() => {
-    return () => {
-      if (imagePreviewUrl) {
-        URL.revokeObjectURL(imagePreviewUrl)
-      }
-    }
-  }, [imagePreviewUrl])
 
   async function onSubmit(data: ProductFormData) {
     const image = data.image[0]
@@ -135,29 +114,14 @@ export function AddProductScreen() {
             inputClassName={appFormInputClassName}
           />
 
-          <Controller
-            name="description"
+          <FormFieldTextarea
             control={control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="description">Description</FieldLabel>
-                <textarea
-                  {...field}
-                  id="description"
-                  rows={3}
-                  placeholder="Camiseta 100% algodão"
-                  aria-invalid={fieldState.invalid}
-                  disabled={isSubmitting}
-                  className={cn(
-                    appFormInputClassName,
-                    "min-h-24 resize-none py-2"
-                  )}
-                />
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
-              </Field>
-            )}
+            name="description"
+            id="description"
+            label="Description"
+            placeholder="Camiseta 100% algodão"
+            disabled={isSubmitting}
+            inputClassName={appFormInputClassName}
           />
 
           <FormFieldInput
@@ -180,37 +144,15 @@ export function AddProductScreen() {
             inputClassName={appFormInputClassName}
           />
 
-          <Controller
-            name="image"
+          <FormFieldFile
             control={control}
-            render={({ field: { onChange, onBlur, name, ref }, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="image">Image</FieldLabel>
-                <Input
-                  id="image"
-                  name={name}
-                  ref={ref}
-                  type="file"
-                  accept="image/*"
-                  aria-invalid={fieldState.invalid}
-                  disabled={isSubmitting}
-                  className={appFormInputClassName}
-                  onBlur={onBlur}
-                  onChange={(event) => onChange(event.target.files)}
-                />
-                {imagePreviewUrl ? (
-                  <div
-                    className="mt-2 size-24 rounded-lg border border-border bg-cover bg-center"
-                    style={{ backgroundImage: `url(${imagePreviewUrl})` }}
-                    role="img"
-                    aria-label="Product preview"
-                  />
-                ) : null}
-                {fieldState.invalid ? (
-                  <FieldError errors={[fieldState.error]} />
-                ) : null}
-              </Field>
-            )}
+            name="image"
+            id="image"
+            label="Image"
+            accept="image/*"
+            showImagePreview
+            disabled={isSubmitting}
+            inputClassName={appFormInputClassName}
           />
         </FieldGroup>
 
