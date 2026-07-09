@@ -8,5 +8,8 @@ export type Product = {
 export type CreateProductRequest = {
   name: string
   price: number
-  imageColor: string
+  description: string
+  brand: string
+  sector: string
+  image: File
 }

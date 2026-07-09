@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useEffect, useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
@@ -22,6 +23,7 @@ import {
   appFormRootErrorClassName,
 } from "@/lib/app-styles"
 import { type ProductFormData, productSchema } from "@/lib/schemas/product"
+import { cn } from "@/lib/utils"
 import { createProduct } from "@/services/products"
 
 export function AddProductScreen() {
@@ -33,7 +35,9 @@ export function AddProductScreen() {
     defaultValues: {
       name: "",
       price: "",
-      imageColor: "#4a2c6e",
+      description: "",
+      brand: "",
+      sector: "",
     },
   })
 
@@ -44,14 +48,41 @@ export function AddProductScreen() {
     formState: { isSubmitting, errors },
   } = form
 
-  const imageColor = watch("imageColor")
+  const imageFiles = watch("image")
+  const imagePreviewUrl = useMemo(() => {
+    const file = imageFiles?.[0]
+
+    if (!file) {
+      return null
+    }
+
+    return URL.createObjectURL(file)
+  }, [imageFiles])
+
+  useEffect(() => {
+    return () => {
+      if (imagePreviewUrl) {
+        URL.revokeObjectURL(imagePreviewUrl)
+      }
+    }
+  }, [imagePreviewUrl])
 
   async function onSubmit(data: ProductFormData) {
+    const image = data.image[0]
+
+    if (!image) {
+      form.setError("image", { message: "Image is required" })
+      return
+    }
+
     try {
       await createProduct({
         name: data.name,
         price: Number(data.price),
-        imageColor: data.imageColor,
+        description: data.description,
+        brand: data.brand,
+        sector: data.sector,
+        image,
       })
       toast.success("Product added successfully!")
       router.push("/products")
@@ -87,8 +118,8 @@ export function AddProductScreen() {
             control={control}
             name="name"
             id="name"
-            label="Product name"
-            placeholder="Cadbury Dairy Milk Hazelnut Chocolate Block | 180g"
+            label="Name"
+            placeholder="Camiseta GND"
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
@@ -99,33 +130,82 @@ export function AddProductScreen() {
             id="price"
             label="Price"
             type="number"
-            placeholder="5.00"
+            placeholder="99.90"
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
 
           <Controller
-            name="imageColor"
+            name="description"
             control={control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="imageColor">Image color</FieldLabel>
-                <div className="flex items-center gap-3">
-                  <Input
-                    {...field}
-                    id="imageColor"
-                    type="text"
-                    placeholder="#4a2c6e"
-                    aria-invalid={fieldState.invalid}
-                    disabled={isSubmitting}
-                    className={appFormInputClassName}
-                  />
+                <FieldLabel htmlFor="description">Description</FieldLabel>
+                <textarea
+                  {...field}
+                  id="description"
+                  rows={3}
+                  placeholder="Camiseta 100% algodão"
+                  aria-invalid={fieldState.invalid}
+                  disabled={isSubmitting}
+                  className={cn(
+                    appFormInputClassName,
+                    "min-h-24 resize-none py-2"
+                  )}
+                />
+                {fieldState.invalid ? (
+                  <FieldError errors={[fieldState.error]} />
+                ) : null}
+              </Field>
+            )}
+          />
+
+          <FormFieldInput
+            control={control}
+            name="brand"
+            id="brand"
+            label="Brand"
+            placeholder="GND"
+            disabled={isSubmitting}
+            inputClassName={appFormInputClassName}
+          />
+
+          <FormFieldInput
+            control={control}
+            name="sector"
+            id="sector"
+            label="Sector"
+            placeholder="Vestuário"
+            disabled={isSubmitting}
+            inputClassName={appFormInputClassName}
+          />
+
+          <Controller
+            name="image"
+            control={control}
+            render={({ field: { onChange, onBlur, name, ref }, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel htmlFor="image">Image</FieldLabel>
+                <Input
+                  id="image"
+                  name={name}
+                  ref={ref}
+                  type="file"
+                  accept="image/*"
+                  aria-invalid={fieldState.invalid}
+                  disabled={isSubmitting}
+                  className={appFormInputClassName}
+                  onBlur={onBlur}
+                  onChange={(event) => onChange(event.target.files)}
+                />
+                {imagePreviewUrl ? (
                   <div
-                    className="size-11 shrink-0 rounded-lg border border-border"
-                    style={{ backgroundColor: imageColor || "#4a2c6e" }}
-                    aria-hidden
+                    className="mt-2 size-24 rounded-lg border border-border bg-cover bg-center"
+                    style={{ backgroundImage: `url(${imagePreviewUrl})` }}
+                    role="img"
+                    aria-label="Product preview"
                   />
-                </div>
+                ) : null}
                 {fieldState.invalid ? (
                   <FieldError errors={[fieldState.error]} />
                 ) : null}
