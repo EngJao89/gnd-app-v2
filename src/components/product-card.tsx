@@ -1,8 +1,10 @@
 "use client"
 
+import Image from "next/image"
 import { Minus, Plus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { getProductImageUrl } from "@/lib/api-url"
 import type { Product } from "@/types/product"
 
 type ProductCardProps = {
@@ -20,14 +22,23 @@ export function ProductCard({
   quantity,
   onQuantityChange,
 }: ProductCardProps) {
+  const imageUrl = getProductImageUrl(product.imageUrl)
+
   return (
     <article className="flex gap-4 border-b border-border py-4 last:border-b-0">
       <div className="flex w-24 shrink-0 flex-col gap-2">
-        <div
-          className="flex aspect-square items-center justify-center rounded-xl border border-border"
-          style={{ backgroundColor: product.imageColor }}
-          aria-hidden
-        />
+        <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+          {imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="96px"
+              unoptimized
+            />
+          ) : null}
+        </div>
 
         <div className="flex items-center justify-between rounded-md border border-border">
           <Button

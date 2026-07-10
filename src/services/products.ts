@@ -1,7 +1,14 @@
 import { api } from "@/lib/axios"
 import { getAuthToken } from "@/lib/auth-session"
-import type { CreateProductRequest, Product } from "@/types/product"
+import type { ApiProduct, CreateProductRequest, Product } from "@/types/product"
+import { normalizeProduct } from "@/types/product"
 import { getStoreMe } from "@/services/store-auth"
+
+export async function getProducts() {
+  const { data } = await api.get<ApiProduct[]>("products")
+
+  return data.map((product) => normalizeProduct(product))
+}
 
 export async function createProduct(data: CreateProductRequest) {
   const token = getAuthToken()
@@ -31,5 +38,5 @@ export async function createProduct(data: CreateProductRequest) {
     },
   })
 
-  return responseData
+  return normalizeProduct(responseData)
 }
