@@ -1,15 +1,17 @@
 import type { NextConfig } from "next";
 
+const apiOrigin = (
+  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3333"
+).replace(/\/$/, "");
+
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
+  async rewrites() {
+    return [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3333",
-        pathname: "/products/images/**",
+        source: "/products/images/:path*",
+        destination: `${apiOrigin}/products/images/:path*`,
       },
-    ],
+    ];
   },
 };
 

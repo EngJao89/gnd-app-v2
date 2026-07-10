@@ -16,5 +16,9 @@ export function getProductImageUrl(imageUrl?: string | null) {
 
   const path = imageUrl.startsWith("/") ? imageUrl : `/${imageUrl}`
 
+  if (path.startsWith("/products/images/")) {
+    return path
+  }
+
   return `${getApiBaseUrl()}${path}`
 }
