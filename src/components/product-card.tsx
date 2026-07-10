@@ -1,7 +1,7 @@
 "use client"
 
-import Image from "next/image"
-import { Minus, Plus } from "lucide-react"
+import { ImageIcon, Minus, Plus } from "lucide-react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { getProductImageUrl } from "@/lib/api-url"
@@ -22,22 +22,27 @@ export function ProductCard({
   quantity,
   onQuantityChange,
 }: ProductCardProps) {
+  const [hasImageError, setHasImageError] = useState(false)
   const imageUrl = getProductImageUrl(product.imageUrl)
 
   return (
     <article className="flex gap-4 border-b border-border py-4 last:border-b-0">
       <div className="flex w-24 shrink-0 flex-col gap-2">
         <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
-          {imageUrl ? (
-            <Image
+          {imageUrl && !hasImageError ? (
+            <img
               src={imageUrl}
               alt={product.name}
-              fill
-              className="object-cover"
-              sizes="96px"
-              unoptimized
+              className="h-full w-full object-cover"
+              loading="lazy"
+              onError={() => setHasImageError(true)}
             />
-          ) : null}
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center text-muted-foreground">
+              <ImageIcon className="size-5" aria-hidden />
+              <span className="text-[10px] leading-tight">No image</span>
+            </div>
+          )}
         </div>
 
         <div className="flex items-center justify-between rounded-md border border-border">
