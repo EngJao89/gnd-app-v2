@@ -4,7 +4,16 @@ import { ImageIcon, Minus, Plus } from "lucide-react"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { getProductImageUrl } from "@/lib/api-url"
+import { cn } from "@/lib/utils"
 import type { Product } from "@/types/product"
 
 type ProductCardProps = {
@@ -26,9 +35,9 @@ export function ProductCard({
   const imageUrl = getProductImageUrl(product.imageUrl)
 
   return (
-    <article className="flex gap-4 border-b border-border py-4 last:border-b-0">
-      <div className="flex w-24 shrink-0 flex-col gap-2">
-        <div className="relative aspect-square overflow-hidden rounded-xl border border-border bg-muted">
+    <Card className="flex-row gap-0 py-0 shadow-sm">
+      <div className="flex w-24 shrink-0 flex-col">
+        <div className="relative aspect-square overflow-hidden bg-muted">
           {imageUrl && !hasImageError ? (
             <img
               src={imageUrl}
@@ -45,52 +54,68 @@ export function ProductCard({
           )}
         </div>
 
-        <div className="flex items-center justify-between rounded-md border border-border">
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            className="size-7 rounded-none"
-            onClick={() => onQuantityChange(Math.max(0, quantity - 1))}
-            aria-label={`Decrease ${product.name}`}
-          >
-            <Minus className="size-3" />
-          </Button>
+        <CardFooter className="border-t bg-background p-2">
+          <div className="flex w-full items-center justify-between rounded-md border border-border">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              className="size-7 rounded-none"
+              onClick={() => onQuantityChange(Math.max(0, quantity - 1))}
+              aria-label={`Decrease ${product.name}`}
+            >
+              <Minus className="size-3" />
+            </Button>
 
-          <span className="min-w-6 text-center text-sm font-medium">
-            {quantity}
-          </span>
+            <span className="min-w-6 text-center text-sm font-medium">
+              {quantity}
+            </span>
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-xs"
-            className="size-7 rounded-none"
-            onClick={() => onQuantityChange(quantity + 1)}
-            aria-label={`Increase ${product.name}`}
-          >
-            <Plus className="size-3" />
-          </Button>
-        </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-xs"
+              className="size-7 rounded-none"
+              onClick={() => onQuantityChange(quantity + 1)}
+              aria-label={`Increase ${product.name}`}
+            >
+              <Plus className="size-3" />
+            </Button>
+          </div>
+        </CardFooter>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-start justify-between gap-3">
-          <h2 className="text-sm font-semibold leading-snug text-foreground">
+      <div className="flex min-w-0 flex-1 flex-col justify-between py-(--card-spacing)">
+        <CardHeader className="px-(--card-spacing) pb-0">
+          <CardTitle className="line-clamp-3 text-sm leading-snug">
             {product.name}
-          </h2>
-          <span className="shrink-0 text-sm font-bold text-foreground">
-            {formatPrice(product.price)}
-          </span>
-        </div>
+          </CardTitle>
+          <CardAction>
+            <span className="text-sm font-bold text-foreground">
+              {formatPrice(product.price)}
+            </span>
+          </CardAction>
+        </CardHeader>
 
-        <button
-          type="button"
-          className="mt-2 w-fit text-sm text-muted-foreground underline underline-offset-2"
-        >
-          Out of stock?
-        </button>
+        <CardContent className="px-(--card-spacing) pt-2">
+          {product.brand || product.sector ? (
+            <p className="text-xs text-muted-foreground">
+              {[product.brand, product.sector].filter(Boolean).join(" · ")}
+            </p>
+          ) : null}
+
+          <Button
+            type="button"
+            variant="link"
+            className={cn(
+              "h-auto p-0 text-sm text-muted-foreground",
+              product.brand || product.sector ? "mt-1" : "mt-0"
+            )}
+          >
+            Out of stock?
+          </Button>
+        </CardContent>
       </div>
-    </article>
+    </Card>
   )
 }

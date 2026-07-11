@@ -115,11 +115,11 @@ export function ProductListScreen() {
           Scan with barcode
         </Button>
 
-        <div className="mt-4 flex-1">
+        <div className="mt-4 flex flex-1 flex-col gap-3">
           {isLoading ? (
-            <div className="space-y-4">
+            <div className="flex flex-col gap-3">
               {Array.from({ length: 4 }).map((_, index) => (
-                <Skeleton key={index} className="h-28 w-full rounded-xl" />
+                <Skeleton key={index} className="h-32 w-full rounded-xl" />
               ))}
             </div>
           ) : filteredProducts.length > 0 ? (
