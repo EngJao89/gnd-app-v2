@@ -1,3 +1,19 @@
+export type ProductStore = {
+  id: string
+  name: string
+  legalName?: string
+  cnpj?: string
+  ownerName?: string
+  email?: string
+  street?: string
+  numberOrBlock?: string
+  neighborhood?: string
+  city?: string
+  state?: string
+  zipCode?: string
+  created_at?: string
+}
+
 export type Product = {
   id: string
   name: string
@@ -8,6 +24,7 @@ export type Product = {
   sector?: string
   storeId?: string
   created_at?: string
+  store?: ProductStore
 }
 
 export type CreateProductRequest = {
@@ -29,6 +46,7 @@ export type ApiProduct = {
   sector?: string
   storeId?: string
   created_at?: string
+  store?: ProductStore
 }
 
 export function normalizeProduct(product: ApiProduct): Product {
@@ -42,5 +60,6 @@ export function normalizeProduct(product: ApiProduct): Product {
     sector: product.sector,
     storeId: product.storeId,
     created_at: product.created_at,
+    store: product.store,
   }
 }
