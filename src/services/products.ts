@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios"
 import { getAuthToken } from "@/lib/auth-session"
-import type { ApiProduct, CreateProductRequest, Product } from "@/types/product"
+import type { ApiProduct, CreateProductRequest } from "@/types/product"
 import { normalizeProduct } from "@/types/product"
 import { getStoreMe } from "@/services/store-auth"
 
@@ -8,6 +8,12 @@ export async function getProducts() {
   const { data } = await api.get<ApiProduct[]>("products")
 
   return data.map((product) => normalizeProduct(product))
+}
+
+export async function getProductById(id: string) {
+  const { data } = await api.get<ApiProduct>(`products/${id}`)
+
+  return normalizeProduct(data)
 }
 
 export async function createProduct(data: CreateProductRequest) {
@@ -32,7 +38,7 @@ export async function createProduct(data: CreateProductRequest) {
   formData.append("sector", data.sector)
   formData.append("image", data.image)
 
-  const { data: responseData } = await api.post<Product>("products", formData, {
+  const { data: responseData } = await api.post<ApiProduct>("products", formData, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

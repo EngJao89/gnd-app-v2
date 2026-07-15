@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { ImageIcon, Minus, Plus } from "lucide-react"
 import { useState } from "react"
 
@@ -35,9 +36,13 @@ export function ProductCard({
   const imageUrl = getProductImageUrl(product.imageUrl)
 
   return (
-    <Card className="flex-row gap-0 py-0 shadow-sm">
+    <Card className="flex-row gap-0 py-0 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex w-24 shrink-0 flex-col">
-        <div className="relative aspect-square overflow-hidden bg-muted">
+        <Link
+          href={`/products/${product.id}`}
+          className="relative aspect-square overflow-hidden bg-muted"
+          aria-label={`View ${product.name}`}
+        >
           {imageUrl && !hasImageError ? (
             <img
               src={imageUrl}
@@ -52,7 +57,7 @@ export function ProductCard({
               <span className="text-[10px] leading-tight">No image</span>
             </div>
           )}
-        </div>
+        </Link>
 
         <CardFooter className="border-t bg-background p-2">
           <div className="flex w-full items-center justify-between rounded-md border border-border">
@@ -88,7 +93,12 @@ export function ProductCard({
       <div className="flex min-w-0 flex-1 flex-col justify-between py-(--card-spacing)">
         <CardHeader className="px-(--card-spacing) pb-0">
           <CardTitle className="line-clamp-3 text-sm leading-snug">
-            {product.name}
+            <Link
+              href={`/products/${product.id}`}
+              className="hover:underline"
+            >
+              {product.name}
+            </Link>
           </CardTitle>
           <CardAction>
             <span className="text-sm font-bold text-foreground">
