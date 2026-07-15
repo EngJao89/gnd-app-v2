@@ -8,6 +8,7 @@ import { toast } from "react-toastify"
 
 import { useRequireStoreSession } from "@/hooks/use-store-session"
 import { AppScreenShell } from "@/components/app-screen-shell"
+import { StoreProductCard } from "@/components/store-product-card"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -19,8 +20,10 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { getApiErrorMessage } from "@/lib/api-error"
 import { appBackLinkClassName, appOutlineButtonClassName } from "@/lib/app-styles"
+import type { Product } from "@/types/product"
 import type { Store } from "@/types/store"
 import { signOut } from "@/services/auth"
+import { getProductsByStoreId } from "@/services/products"
 import { getStoreMe } from "@/services/store-auth"
 
 function formatAddress(store: Store) {
@@ -40,6 +43,10 @@ export function StoreProfileScreen() {
   const isAuthorized = useRequireStoreSession()
   const [store, setStore] = useState<Store | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [showProducts, setShowProducts] = useState(false)
+  const [products, setProducts] = useState<Product[]>([])
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false)
+  const [hasLoadedProducts, setHasLoadedProducts] = useState(false)
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -77,6 +84,32 @@ export function StoreProfileScreen() {
       isMounted = false
     }
   }, [isAuthorized, router])
+
+  async function handleToggleProducts() {
+    if (showProducts) {
+      setShowProducts(false)
+      return
+    }
+
+    setShowProducts(true)
+
+    if (hasLoadedProducts || !store) {
+      return
+    }
+
+    setIsLoadingProducts(true)
+
+    try {
+      const data = await getProductsByStoreId(store.id)
+      setProducts(data)
+      setHasLoadedProducts(true)
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, "Failed to load store products."))
+      setShowProducts(false)
+    } finally {
+      setIsLoadingProducts(false)
+    }
+  }
 
   function handleLogout() {
     signOut()
@@ -165,13 +198,32 @@ export function StoreProfileScreen() {
         </Card>
 
         <div className="mt-8 flex flex-col gap-3">
-          <Button asChild className={appOutlineButtonClassName}>
-            <Link href="/products/new">Add product</Link>
+          <Button
+            type="button"
+            className={appOutlineButtonClassName}
+            onClick={handleToggleProducts}
+            aria-expanded={showProducts}
+          >
+            {showProducts ? "Hide products" : "View products"}
           </Button>
 
-          <Button asChild className={appOutlineButtonClassName}>
-            <Link href="/products">View products</Link>
-          </Button>
+          {showProducts ? (
+            <div className="flex flex-col gap-3">
+              {isLoadingProducts ? (
+                Array.from({ length: 3 }).map((_, index) => (
+                  <Skeleton key={index} className="h-28 w-full rounded-xl" />
+                ))
+              ) : products.length > 0 ? (
+                products.map((product) => (
+                  <StoreProductCard key={product.id} product={product} />
+                ))
+              ) : (
+                <p className="py-4 text-center text-sm text-muted-foreground">
+                  No products registered for this store yet.
+                </p>
+              )}
+            </div>
+          ) : null}
 
           <Button
             type="button"

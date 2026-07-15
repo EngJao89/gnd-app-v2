@@ -10,6 +10,12 @@ export async function getProducts() {
   return data.map((product) => normalizeProduct(product))
 }
 
+export async function getProductsByStoreId(storeId: string) {
+  const products = await getProducts()
+
+  return products.filter((product) => product.storeId === storeId)
+}
+
 export async function getProductById(id: string) {
   const { data } = await api.get<ApiProduct>(`products/${id}`)
 
