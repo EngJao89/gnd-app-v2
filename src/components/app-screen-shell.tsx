@@ -7,6 +7,8 @@ type AppScreenShellProps = {
   location?: string
   showAddProduct?: boolean
   addProductHref?: string
+  showStoreProfile?: boolean
+  storeProfileHref?: string
   showCartIcon?: boolean
   showCartBadge?: boolean
   showLogout?: boolean
@@ -19,6 +21,8 @@ export function AppScreenShell({
   location,
   showAddProduct,
   addProductHref,
+  showStoreProfile,
+  storeProfileHref,
   showCartIcon,
   showCartBadge,
   showLogout,
@@ -30,6 +34,8 @@ export function AppScreenShell({
         location={location}
         showAddProduct={showAddProduct}
         addProductHref={addProductHref}
+        showStoreProfile={showStoreProfile}
+        storeProfileHref={storeProfileHref}
         showCartIcon={showCartIcon}
         showCartBadge={showCartBadge}
         showLogout={showLogout}

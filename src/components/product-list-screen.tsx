@@ -86,6 +86,7 @@ export function ProductListScreen() {
     <AppScreenShell
       location="Belmore, Sydney"
       showAddProduct={isStore}
+      showStoreProfile={isStore}
       showCartIcon
       showLogout
       showCartBadge={cartItemCount > 0}

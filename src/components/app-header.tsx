@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { LogOut, MapPin, Plus, ShoppingBasket } from "lucide-react"
+import { LogOut, MapPin, Plus, ShoppingBasket, Store } from "lucide-react"
 import { toast } from "react-toastify"
 
 import { cn } from "@/lib/utils"
@@ -14,6 +14,8 @@ type AppHeaderProps = {
   location?: string
   showAddProduct?: boolean
   addProductHref?: string
+  showStoreProfile?: boolean
+  storeProfileHref?: string
   showCartIcon?: boolean
   showCartBadge?: boolean
   showLogout?: boolean
@@ -25,6 +27,8 @@ export function AppHeader({
   location,
   showAddProduct,
   addProductHref = "/products/new",
+  showStoreProfile,
+  storeProfileHref = "/stores/profile",
   showCartIcon,
   showCartBadge,
   showLogout,
@@ -61,7 +65,7 @@ export function AppHeader({
         </div>
       ) : null}
 
-      {showAddProduct || showCartIcon || showLogout ? (
+      {showAddProduct || showStoreProfile || showCartIcon || showLogout ? (
         <div className="ml-auto flex items-center gap-2">
           {showAddProduct ? (
             <Link
@@ -70,6 +74,16 @@ export function AppHeader({
               aria-label="Add product"
             >
               <Plus className="size-5" />
+            </Link>
+          ) : null}
+
+          {showStoreProfile ? (
+            <Link
+              href={storeProfileHref}
+              className="flex size-10 items-center justify-center rounded-lg border-2 border-white text-white transition-colors hover:bg-white/10"
+              aria-label="Store profile"
+            >
+              <Store className="size-5" />
             </Link>
           ) : null}
 
