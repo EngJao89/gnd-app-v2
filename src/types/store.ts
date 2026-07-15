@@ -4,6 +4,7 @@ export type Store = {
   legalName: string
   cnpj: string
   ownerName: string
+  email?: string
   street: string
   numberOrBlock: string
   neighborhood: string
