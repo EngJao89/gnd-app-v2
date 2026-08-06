@@ -1,11 +1,15 @@
-import Link from "next/link"
+import { useTranslations } from "next-intl"
 
 import { AppScreenShell } from "@/components/app-screen-shell"
 import { QrCodeDisplay } from "@/components/qr-code-display"
 import { Button } from "@/components/ui/button"
+import { Link } from "@/i18n/navigation"
 import { appBackLinkClassName, GUEST_QR_CODE } from "@/lib/app-styles"
 
 export function QrCodeScreen() {
+  const t = useTranslations("QrCode")
+  const tCommon = useTranslations("Common")
+
   return (
     <AppScreenShell>
       <div className="flex flex-1 flex-col items-center px-6 pb-10 pt-12">
@@ -19,11 +23,11 @@ export function QrCodeScreen() {
         </div>
 
         <p className="mt-10 text-center text-sm font-bold tracking-wide text-foreground uppercase">
-          Point your camera to QR-Code
+          {t("instruction")}
         </p>
 
         <Button asChild variant="link" className={`mt-auto ${appBackLinkClassName}`}>
-          <Link href="/guest">Back</Link>
+          <Link href="/guest">{tCommon("back")}</Link>
         </Button>
       </div>
     </AppScreenShell>

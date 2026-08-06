@@ -1,9 +1,13 @@
 import { z } from "zod"
 
-export const signInSchema = z.object({
-  email: z.email("Invalid email"),
-  password: z.string().min(1, "Password is required"),
-  rememberMe: z.boolean(),
-})
+type Translate = (key: string) => string
 
-export type SignInFormData = z.infer<typeof signInSchema>
+export function createSignInSchema(t: Translate) {
+  return z.object({
+    email: z.email(t("invalidEmail")),
+    password: z.string().min(1, t("passwordRequired")),
+    rememberMe: z.boolean(),
+  })
+}
+
+export type SignInFormData = z.infer<ReturnType<typeof createSignInSchema>>

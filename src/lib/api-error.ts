@@ -1,6 +1,10 @@
 import { isAxiosError } from "axios"
 
-export function getApiErrorMessage(error: unknown, fallback: string): string {
+export function getApiErrorMessage(
+  error: unknown,
+  fallback: string,
+  networkMessage = fallback
+): string {
   if (isAxiosError(error)) {
     const data = error.response?.data
 
@@ -21,7 +25,7 @@ export function getApiErrorMessage(error: unknown, fallback: string): string {
     }
 
     if (error.code === "ERR_NETWORK") {
-      return "Could not connect to the server. Please try again."
+      return networkMessage
     }
   }
 

@@ -1,8 +1,8 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
@@ -14,6 +14,7 @@ import {
 } from "@/components/form/form-field-input"
 import { Button } from "@/components/ui/button"
 import { FieldGroup } from "@/components/ui/field"
+import { Link, useRouter } from "@/i18n/navigation"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   authActionButtonClassName,
@@ -25,59 +26,67 @@ import {
 } from "@/lib/auth-styles"
 import {
   type RegisterFormData,
-  registerSchema,
+  createRegisterSchema,
 } from "@/lib/schemas/register"
 import { createUser } from "@/services/users"
 
-const fields: {
-  name: keyof RegisterFormData
-  id: string
-  label: string
-  type: string
-  autoComplete?: string
-  placeholder?: string
-}[] = [
-  {
-    name: "firstName",
-    id: "first-name",
-    label: "First Name",
-    type: "text",
-    autoComplete: "given-name",
-  },
-  {
-    name: "surname",
-    id: "surname",
-    label: "Surname",
-    type: "text",
-    autoComplete: "family-name",
-  },
-  {
-    name: "email",
-    id: "email",
-    label: "Email",
-    type: "email",
-    autoComplete: "email",
-    placeholder: "usuario@email.com",
-  },
-  {
-    name: "password",
-    id: "password",
-    label: "Password",
-    type: "password",
-    autoComplete: "new-password",
-  },
-  {
-    name: "phone",
-    id: "phone",
-    label: "Phone number",
-    type: "tel",
-    autoComplete: "tel",
-    placeholder: "+61",
-  },
-]
-
 export function RegisterScreen() {
+  const t = useTranslations("Register")
+  const tValidation = useTranslations("Validation")
+  const tCommon = useTranslations("Common")
   const router = useRouter()
+
+  const registerSchema = useMemo(
+    () => createRegisterSchema(tValidation),
+    [tValidation]
+  )
+
+  const fields: {
+    name: keyof RegisterFormData
+    id: string
+    label: string
+    type: string
+    autoComplete?: string
+    placeholder?: string
+  }[] = [
+    {
+      name: "firstName",
+      id: "first-name",
+      label: t("firstName"),
+      type: "text",
+      autoComplete: "given-name",
+    },
+    {
+      name: "surname",
+      id: "surname",
+      label: t("surname"),
+      type: "text",
+      autoComplete: "family-name",
+    },
+    {
+      name: "email",
+      id: "email",
+      label: t("email"),
+      type: "email",
+      autoComplete: "email",
+      placeholder: t("emailPlaceholder"),
+    },
+    {
+      name: "password",
+      id: "password",
+      label: t("password"),
+      type: "password",
+      autoComplete: "new-password",
+    },
+    {
+      name: "phone",
+      id: "phone",
+      label: t("phone"),
+      type: "tel",
+      autoComplete: "tel",
+      placeholder: t("phonePlaceholder"),
+    },
+  ]
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -105,12 +114,13 @@ export function RegisterScreen() {
         password: data.password,
       })
 
-      toast.success("Account created successfully!")
+      toast.success(t("success"))
       router.push("/sign-in")
     } catch (error) {
       const message = getApiErrorMessage(
         error,
-        "Failed to register. Please try again."
+        t("error"),
+        tCommon("networkError")
       )
 
       form.setError("root", { message })
@@ -159,11 +169,11 @@ export function RegisterScreen() {
             disabled={isSubmitting}
             className={authActionButtonClassName}
           >
-            {isSubmitting ? "Registering..." : "Register Client"}
+            {isSubmitting ? t("submitting") : t("submit")}
           </Button>
 
           <Button asChild variant="link" className={authBackLinkClassName}>
-            <Link href="/">Back</Link>
+            <Link href="/">{tCommon("back")}</Link>
           </Button>
         </div>
       </form>

@@ -1,25 +1,28 @@
 "use client"
 
 import Image from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { LogOut, MapPin, Plus, ShoppingBasket, Store } from "lucide-react"
+import { useTranslations } from "next-intl"
+import type { ComponentProps } from "react"
 import { toast } from "react-toastify"
 
+import { Link, useRouter } from "@/i18n/navigation"
 import { cn } from "@/lib/utils"
 import { signOut } from "@/services/auth"
+
+type Href = ComponentProps<typeof Link>["href"]
 
 type AppHeaderProps = {
   className?: string
   location?: string
   showAddProduct?: boolean
-  addProductHref?: string
+  addProductHref?: Href
   showStoreProfile?: boolean
-  storeProfileHref?: string
+  storeProfileHref?: Href
   showCartIcon?: boolean
   showCartBadge?: boolean
   showLogout?: boolean
-  cartHref?: string
+  cartHref?: Href
 }
 
 export function AppHeader({
@@ -34,11 +37,13 @@ export function AppHeader({
   showLogout,
   cartHref = "/cart",
 }: AppHeaderProps) {
+  const t = useTranslations("Header")
+  const tCommon = useTranslations("Common")
   const router = useRouter()
 
   function handleLogout() {
     signOut()
-    toast.success("Logged out successfully!")
+    toast.success(t("loggedOut"))
     router.push("/")
   }
 
@@ -51,7 +56,7 @@ export function AppHeader({
     >
       <Image
         src="/header-logo.png"
-        alt="Groceries Next Door"
+        alt={tCommon("logoAlt")}
         width={40}
         height={40}
         priority
@@ -71,7 +76,7 @@ export function AppHeader({
             <Link
               href={addProductHref}
               className="flex size-10 items-center justify-center rounded-lg border-2 border-white text-white transition-colors hover:bg-white/10"
-              aria-label="Add product"
+              aria-label={t("addProduct")}
             >
               <Plus className="size-5" />
             </Link>
@@ -81,7 +86,7 @@ export function AppHeader({
             <Link
               href={storeProfileHref}
               className="flex size-10 items-center justify-center rounded-lg border-2 border-white text-white transition-colors hover:bg-white/10"
-              aria-label="Store profile"
+              aria-label={t("storeProfile")}
             >
               <Store className="size-5" />
             </Link>
@@ -91,7 +96,7 @@ export function AppHeader({
             <Link
               href={cartHref}
               className="relative flex size-10 items-center justify-center rounded-lg border-2 border-white"
-              aria-label="Open cart"
+              aria-label={t("openCart")}
             >
               <ShoppingBasket className="size-5 text-white" />
               {showCartBadge ? (
@@ -105,7 +110,7 @@ export function AppHeader({
               type="button"
               onClick={handleLogout}
               className="flex size-10 items-center justify-center rounded-lg border-2 border-white text-white transition-colors hover:bg-white/10"
-              aria-label="Log out"
+              aria-label={t("logOut")}
             >
               <LogOut className="size-5" />
             </button>

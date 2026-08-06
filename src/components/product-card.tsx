@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { ImageIcon, Minus, Plus } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Link } from "@/i18n/navigation"
 import { getProductImageUrl } from "@/lib/api-url"
 import { cn } from "@/lib/utils"
 import type { Product } from "@/types/product"
@@ -32,6 +33,8 @@ export function ProductCard({
   quantity,
   onQuantityChange,
 }: ProductCardProps) {
+  const t = useTranslations("ProductCard")
+  const tCommon = useTranslations("Common")
   const [hasImageError, setHasImageError] = useState(false)
   const imageUrl = getProductImageUrl(product.imageUrl)
 
@@ -41,7 +44,7 @@ export function ProductCard({
         <Link
           href={`/products/${product.id}`}
           className="relative aspect-square overflow-hidden bg-muted"
-          aria-label={`View ${product.name}`}
+          aria-label={t("view", { name: product.name })}
         >
           {imageUrl && !hasImageError ? (
             <img
@@ -54,7 +57,9 @@ export function ProductCard({
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center text-muted-foreground">
               <ImageIcon className="size-5" aria-hidden />
-              <span className="text-[10px] leading-tight">No image</span>
+              <span className="text-[10px] leading-tight">
+                {tCommon("noImage")}
+              </span>
             </div>
           )}
         </Link>
@@ -67,7 +72,7 @@ export function ProductCard({
               size="icon-xs"
               className="size-7 rounded-none"
               onClick={() => onQuantityChange(Math.max(0, quantity - 1))}
-              aria-label={`Decrease ${product.name}`}
+              aria-label={t("decrease", { name: product.name })}
             >
               <Minus className="size-3" />
             </Button>
@@ -82,7 +87,7 @@ export function ProductCard({
               size="icon-xs"
               className="size-7 rounded-none"
               onClick={() => onQuantityChange(quantity + 1)}
-              aria-label={`Increase ${product.name}`}
+              aria-label={t("increase", { name: product.name })}
             >
               <Plus className="size-3" />
             </Button>
@@ -122,7 +127,7 @@ export function ProductCard({
               product.brand || product.sector ? "mt-1" : "mt-0"
             )}
           >
-            Out of stock?
+            {t("outOfStock")}
           </Button>
         </CardContent>
       </div>

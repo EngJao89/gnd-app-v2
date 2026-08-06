@@ -1,8 +1,8 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { useMemo } from "react"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Link, useRouter } from "@/i18n/navigation"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   authActionButtonClassName,
@@ -27,13 +28,21 @@ import {
 } from "@/lib/auth-styles"
 import {
   type SignInFormData,
-  signInSchema,
+  createSignInSchema,
 } from "@/lib/schemas/sign-in"
 import { cn } from "@/lib/utils"
 import { signIn } from "@/services/auth"
 
 export function SignInScreen() {
+  const t = useTranslations("SignIn")
+  const tValidation = useTranslations("Validation")
+  const tCommon = useTranslations("Common")
   const router = useRouter()
+
+  const signInSchema = useMemo(
+    () => createSignInSchema(tValidation),
+    [tValidation]
+  )
 
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
@@ -53,12 +62,13 @@ export function SignInScreen() {
   async function onSubmit(data: SignInFormData) {
     try {
       await signIn({ email: data.email, password: data.password })
-      toast.success("Login successful!")
+      toast.success(t("success"))
       router.push("/products")
     } catch (error) {
       const message = getApiErrorMessage(
         error,
-        "Invalid email or password."
+        t("invalidCredentials"),
+        tCommon("networkError")
       )
 
       form.setError("root", { message })
@@ -82,10 +92,10 @@ export function SignInScreen() {
             control={control}
             name="email"
             id="email"
-            label="Email"
+            label={t("email")}
             type="email"
             autoComplete="email"
-            placeholder="usuario@email.com"
+            placeholder={t("emailPlaceholder")}
             disabled={isSubmitting}
             labelClassName={authLabelClassName}
             inputClassName={authInputClassName}
@@ -96,7 +106,7 @@ export function SignInScreen() {
             control={control}
             name="password"
             id="password"
-            label="Password"
+            label={t("password")}
             type="password"
             autoComplete="current-password"
             disabled={isSubmitting}
@@ -121,7 +131,7 @@ export function SignInScreen() {
                   htmlFor="remember-me"
                   className={cn(authLabelClassName, "font-normal")}
                 >
-                  Remember me
+                  {t("rememberMe")}
                 </FieldLabel>
               </Field>
             )}
@@ -139,11 +149,11 @@ export function SignInScreen() {
             disabled={isSubmitting}
             className={authActionButtonClassName}
           >
-            {isSubmitting ? "Logging in..." : "Log in"}
+            {isSubmitting ? t("loggingIn") : t("logIn")}
           </Button>
 
           <Button asChild variant="link" className={authBackLinkClassName}>
-            <Link href="/">Back</Link>
+            <Link href="/">{tCommon("back")}</Link>
           </Button>
         </div>
       </form>

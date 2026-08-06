@@ -1,10 +1,11 @@
 "use client"
 
 import { isAxiosError } from "axios"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
+import { useRouter } from "@/i18n/navigation"
 import {
   clearAuthSession,
   getAuthRole,
@@ -25,17 +26,20 @@ async function confirmStoreSession() {
   }
 }
 
-function handleInvalidStoreSession(router: ReturnType<typeof useRouter>) {
+function handleInvalidStoreSession(
+  router: ReturnType<typeof useRouter>,
+  messages: { expired: string; onlyStores: string }
+) {
   const wasStore = getAuthRole() === "store"
 
   if (wasStore) {
     clearAuthSession()
-    toast.error("Store session expired. Please sign in again.")
+    toast.error(messages.expired)
     router.replace("/stores/sign-in")
     return
   }
 
-  toast.error("Only stores can add products.")
+  toast.error(messages.onlyStores)
   router.replace("/products")
 }
 
@@ -64,6 +68,7 @@ export function useIsStoreSession() {
 }
 
 export function useRequireStoreSession() {
+  const t = useTranslations("StoreSession")
   const router = useRouter()
   const [isAuthorized, setIsAuthorized] = useState(false)
 
@@ -72,7 +77,7 @@ export function useRequireStoreSession() {
 
     async function validate() {
       if (!isAuthenticated()) {
-        toast.error("Please sign in as a store to continue.")
+        toast.error(t("signInRequired"))
         router.replace("/stores/sign-in")
         return
       }
@@ -88,11 +93,14 @@ export function useRequireStoreSession() {
           isAxiosError(error) &&
           (error.response?.status === 401 || error.response?.status === 403)
         ) {
-          handleInvalidStoreSession(router)
+          handleInvalidStoreSession(router, {
+            expired: t("expired"),
+            onlyStores: t("onlyStores"),
+          })
           return
         }
 
-        toast.error("Could not verify store session. Please try again.")
+        toast.error(t("verifyError"))
         router.replace("/products")
       }
     }
@@ -102,7 +110,7 @@ export function useRequireStoreSession() {
     return () => {
       isMounted = false
     }
-  }, [router])
+  }, [router, t])
 
   return isAuthorized
 }

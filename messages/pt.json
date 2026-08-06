@@ -1,0 +1,216 @@
+{
+  "Metadata": {
+    "title": "Groceries Next Door",
+    "description": "Seu app de entrega de compras do bairro"
+  },
+  "Common": {
+    "back": "Voltar",
+    "backToProducts": "Voltar aos produtos",
+    "main": "Início",
+    "submit": "Enviar",
+    "noImage": "Sem imagem",
+    "location": "Belmore, Sydney",
+    "networkError": "Não foi possível conectar ao servidor. Tente novamente.",
+    "logoAlt": "Groceries Next Door"
+  },
+  "LocaleSwitcher": {
+    "label": "Idioma",
+    "pt": "Português",
+    "en": "English"
+  },
+  "Landing": {
+    "signIn": "Entrar",
+    "registerClient": "Cadastrar cliente",
+    "registerStore": "Cadastrar loja",
+    "storeSignIn": "Entrar como loja",
+    "continueWithoutRegistration": "Continuar sem cadastro"
+  },
+  "SignIn": {
+    "email": "E-mail",
+    "password": "Senha",
+    "rememberMe": "Lembrar de mim",
+    "emailPlaceholder": "usuario@email.com",
+    "logIn": "Entrar",
+    "loggingIn": "Entrando...",
+    "success": "Login realizado com sucesso!",
+    "invalidCredentials": "E-mail ou senha inválidos."
+  },
+  "Register": {
+    "firstName": "Nome",
+    "surname": "Sobrenome",
+    "email": "E-mail",
+    "password": "Senha",
+    "phone": "Telefone",
+    "emailPlaceholder": "usuario@email.com",
+    "phonePlaceholder": "+55",
+    "submit": "Cadastrar cliente",
+    "submitting": "Cadastrando...",
+    "success": "Conta criada com sucesso!",
+    "error": "Falha ao cadastrar. Tente novamente."
+  },
+  "StoreSignIn": {
+    "email": "E-mail",
+    "password": "Senha",
+    "emailPlaceholder": "loja@email.com",
+    "logIn": "Entrar",
+    "loggingIn": "Entrando...",
+    "success": "Login da loja realizado com sucesso!",
+    "invalidCredentials": "E-mail ou senha inválidos."
+  },
+  "StoreRegister": {
+    "title": "Cadastrar loja",
+    "subtitle": "Preencha os dados da loja abaixo.",
+    "name": "Nome da loja",
+    "legalName": "Razão social",
+    "cnpj": "CNPJ",
+    "ownerName": "Nome do responsável",
+    "street": "Rua",
+    "numberOrBlock": "Número ou bloco",
+    "neighborhood": "Bairro",
+    "city": "Cidade",
+    "state": "Estado",
+    "zipCode": "CEP",
+    "placeholders": {
+      "name": "Loja GND Centro",
+      "legalName": "GND Comércio Ltda",
+      "cnpj": "12.345.678/0001-90",
+      "ownerName": "Maria Silva",
+      "street": "Rua das Flores",
+      "numberOrBlock": "123",
+      "neighborhood": "Centro",
+      "city": "São Paulo",
+      "state": "SP",
+      "zipCode": "01310-100"
+    },
+    "submit": "Cadastrar loja",
+    "submitting": "Cadastrando...",
+    "success": "Loja cadastrada com sucesso!",
+    "error": "Falha ao cadastrar a loja. Tente novamente."
+  },
+  "Guest": {
+    "qrCode": "QR Code",
+    "enterWithKeyboard": "Digitar código"
+  },
+  "QrCode": {
+    "instruction": "Aponte a câmera para o QR Code"
+  },
+  "EnterCode": {
+    "instruction": "Digite o código abaixo",
+    "code": "Código"
+  },
+  "Products": {
+    "search": "Buscar produtos",
+    "scanBarcode": "Escanear código de barras",
+    "emptySearch": "Nenhum produto corresponde à sua busca.",
+    "empty": "Nenhum produto disponível ainda.",
+    "loadError": "Falha ao carregar produtos. Tente novamente."
+  },
+  "ProductDetail": {
+    "notFound": "Produto não encontrado.",
+    "productDetails": "Detalhes do produto",
+    "description": "Descrição",
+    "store": "Loja",
+    "addToCart": "Adicionar ao carrinho",
+    "addToCartSoon": "Adicionar ao carrinho em breve.",
+    "loadError": "Falha ao carregar detalhes do produto.",
+    "decrease": "Diminuir {name}",
+    "increase": "Aumentar {name}"
+  },
+  "AddProduct": {
+    "title": "Adicionar produto",
+    "subtitle": "Preencha os dados do produto abaixo.",
+    "name": "Nome",
+    "price": "Preço",
+    "description": "Descrição",
+    "brand": "Marca",
+    "sector": "Setor",
+    "image": "Imagem",
+    "placeholders": {
+      "name": "Camiseta GND",
+      "price": "99,90",
+      "description": "Camiseta 100% algodão",
+      "brand": "GND",
+      "sector": "Vestuário"
+    },
+    "imageRequired": "A imagem é obrigatória",
+    "submit": "Adicionar produto",
+    "submitting": "Adicionando...",
+    "success": "Produto adicionado com sucesso!",
+    "error": "Falha ao adicionar produto. Tente novamente."
+  },
+  "Cart": {
+    "empty": "Seu carrinho está vazio",
+    "total": "Total:",
+    "applePay": "Apple Pay",
+    "bpay": "BPAY",
+    "debitCredit": "Débito/Crédito"
+  },
+  "StoreProfile": {
+    "title": "Perfil da loja",
+    "subtitle": "Dados da conta da sua loja.",
+    "cnpj": "CNPJ",
+    "owner": "Responsável",
+    "email": "E-mail",
+    "address": "Endereço",
+    "cep": "CEP {zipCode}",
+    "viewProducts": "Ver produtos",
+    "hideProducts": "Ocultar produtos",
+    "noProducts": "Nenhum produto cadastrado para esta loja ainda.",
+    "logOut": "Sair",
+    "loadError": "Falha ao carregar o perfil da loja.",
+    "productsLoadError": "Falha ao carregar os produtos da loja.",
+    "loggedOut": "Sessão encerrada com sucesso!"
+  },
+  "Header": {
+    "addProduct": "Adicionar produto",
+    "storeProfile": "Perfil da loja",
+    "openCart": "Abrir carrinho",
+    "logOut": "Sair",
+    "loggedOut": "Sessão encerrada com sucesso!"
+  },
+  "ProductCard": {
+    "view": "Ver {name}",
+    "decrease": "Diminuir {name}",
+    "increase": "Aumentar {name}",
+    "outOfStock": "Sem estoque?"
+  },
+  "Success": {
+    "title": "Sucesso!",
+    "message": "Estamos mais perto do que parece"
+  },
+  "Form": {
+    "filePreview": "Pré-visualização do arquivo"
+  },
+  "Validation": {
+    "invalidEmail": "E-mail inválido",
+    "passwordRequired": "A senha é obrigatória",
+    "firstNameRequired": "O nome é obrigatório",
+    "surnameRequired": "O sobrenome é obrigatório",
+    "passwordMin": "A senha deve ter pelo menos 6 caracteres",
+    "phoneRequired": "O telefone é obrigatório",
+    "storeNameRequired": "O nome da loja é obrigatório",
+    "legalNameRequired": "A razão social é obrigatória",
+    "cnpjRequired": "O CNPJ é obrigatório",
+    "ownerNameRequired": "O nome do responsável é obrigatório",
+    "streetRequired": "A rua é obrigatória",
+    "numberOrBlockRequired": "O número ou bloco é obrigatório",
+    "neighborhoodRequired": "O bairro é obrigatório",
+    "cityRequired": "A cidade é obrigatória",
+    "stateRequired": "O estado é obrigatório",
+    "stateMax": "O estado deve ter 2 caracteres",
+    "zipCodeRequired": "O CEP é obrigatório",
+    "imageRequired": "A imagem é obrigatória",
+    "productNameRequired": "O nome do produto é obrigatório",
+    "priceRequired": "O preço é obrigatório",
+    "pricePositive": "O preço deve ser maior que zero",
+    "descriptionRequired": "A descrição é obrigatória",
+    "brandRequired": "A marca é obrigatória",
+    "sectorRequired": "O setor é obrigatório"
+  },
+  "StoreSession": {
+    "expired": "Sessão da loja expirada. Entre novamente.",
+    "onlyStores": "Apenas lojas podem adicionar produtos.",
+    "signInRequired": "Entre como loja para continuar.",
+    "verifyError": "Não foi possível verificar a sessão da loja. Tente novamente."
+  }
+}
