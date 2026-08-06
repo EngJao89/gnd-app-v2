@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { Search } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useMemo, useState } from "react"
 import { toast } from "react-toastify"
 
@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Link } from "@/i18n/navigation"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   appBackLinkClassName,
@@ -22,6 +23,8 @@ import type { Product } from "@/types/product"
 import { getProducts } from "@/services/products"
 
 export function ProductListScreen() {
+  const t = useTranslations("Products")
+  const tCommon = useTranslations("Common")
   const isStore = useIsStoreSession()
   const [products, setProducts] = useState<Product[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -41,7 +44,11 @@ export function ProductListScreen() {
       } catch (error) {
         if (isMounted) {
           toast.error(
-            getApiErrorMessage(error, "Failed to load products. Please try again.")
+            getApiErrorMessage(
+              error,
+              t("loadError"),
+              tCommon("networkError")
+            )
           )
         }
       } finally {
@@ -56,7 +63,7 @@ export function ProductListScreen() {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [t, tCommon])
 
   const filteredProducts = useMemo(() => {
     const query = search.trim().toLowerCase()
@@ -84,7 +91,7 @@ export function ProductListScreen() {
 
   return (
     <AppScreenShell
-      location="Belmore, Sydney"
+      location={tCommon("location")}
       showAddProduct={isStore}
       showStoreProfile={isStore}
       showCartIcon
@@ -94,13 +101,13 @@ export function ProductListScreen() {
       <div className="flex flex-1 flex-col px-6 pb-10 pt-6">
         <Field>
           <FieldLabel htmlFor="search-products" className="sr-only">
-            Search products
+            {t("search")}
           </FieldLabel>
           <div className="relative">
             <Input
               id="search-products"
               type="search"
-              placeholder="Search products"
+              placeholder={t("search")}
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               className={appSearchInputClassName}
@@ -113,7 +120,7 @@ export function ProductListScreen() {
         </Field>
 
         <Button type="button" className={`mt-4 ${appOutlineButtonClassName}`}>
-          Scan with barcode
+          {t("scanBarcode")}
         </Button>
 
         <div className="mt-4 flex flex-1 flex-col gap-3">
@@ -136,15 +143,13 @@ export function ProductListScreen() {
             ))
           ) : (
             <p className="py-8 text-center text-sm text-muted-foreground">
-              {search.trim()
-                ? "No products match your search."
-                : "No products available yet."}
+              {search.trim() ? t("emptySearch") : t("empty")}
             </p>
           )}
         </div>
 
         <Button asChild variant="link" className={`mt-6 ${appBackLinkClassName}`}>
-          <Link href="/">Back</Link>
+          <Link href="/">{tCommon("back")}</Link>
         </Button>
       </div>
     </AppScreenShell>

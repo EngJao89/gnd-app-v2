@@ -1,8 +1,8 @@
 "use client"
 
-import Link from "next/link"
-import { useParams } from "next/navigation"
 import { ImageIcon, Minus, Plus } from "lucide-react"
+import { useTranslations } from "next-intl"
+import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
@@ -17,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Link } from "@/i18n/navigation"
 import { getApiErrorMessage } from "@/lib/api-error"
 import { getProductImageUrl } from "@/lib/api-url"
 import {
@@ -31,6 +32,8 @@ function formatPrice(price: number) {
 }
 
 export function ProductDetailScreen() {
+  const t = useTranslations("ProductDetail")
+  const tCommon = useTranslations("Common")
   const params = useParams<{ id: string }>()
   const productId = params.id
 
@@ -60,7 +63,11 @@ export function ProductDetailScreen() {
         if (isMounted) {
           setProduct(null)
           toast.error(
-            getApiErrorMessage(error, "Failed to load product details.")
+            getApiErrorMessage(
+              error,
+              t("loadError"),
+              tCommon("networkError")
+            )
           )
         }
       } finally {
@@ -75,7 +82,7 @@ export function ProductDetailScreen() {
     return () => {
       isMounted = false
     }
-  }, [productId])
+  }, [productId, t, tCommon])
 
   const imageUrl = getProductImageUrl(product?.imageUrl)
 
@@ -97,10 +104,10 @@ export function ProductDetailScreen() {
       <AppScreenShell showCartIcon showLogout>
         <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 pb-10">
           <p className="text-center text-sm text-muted-foreground">
-            Product not found.
+            {t("notFound")}
           </p>
           <Button asChild variant="link" className={appBackLinkClassName}>
-            <Link href="/products">Back to products</Link>
+            <Link href="/products">{tCommon("backToProducts")}</Link>
           </Button>
         </div>
       </AppScreenShell>
@@ -122,7 +129,7 @@ export function ProductDetailScreen() {
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center gap-2 text-muted-foreground">
                 <ImageIcon className="size-10" aria-hidden />
-                <span className="text-sm">No image</span>
+                <span className="text-sm">{tCommon("noImage")}</span>
               </div>
             )}
           </div>
@@ -131,7 +138,7 @@ export function ProductDetailScreen() {
             <CardTitle className="text-xl leading-snug">{product.name}</CardTitle>
             <CardDescription>
               {[product.brand, product.sector].filter(Boolean).join(" · ") ||
-                "Product details"}
+                t("productDetails")}
             </CardDescription>
             <p className="text-2xl font-bold text-foreground">
               {formatPrice(product.price)}
@@ -142,7 +149,7 @@ export function ProductDetailScreen() {
             {product.description ? (
               <div>
                 <h2 className="text-sm font-semibold text-foreground">
-                  Description
+                  {t("description")}
                 </h2>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
                   {product.description}
@@ -152,7 +159,9 @@ export function ProductDetailScreen() {
 
             {product.store ? (
               <div>
-                <h2 className="text-sm font-semibold text-foreground">Store</h2>
+                <h2 className="text-sm font-semibold text-foreground">
+                  {t("store")}
+                </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {product.store.name}
                 </p>
@@ -172,7 +181,7 @@ export function ProductDetailScreen() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setQuantity((current) => Math.max(1, current - 1))}
-                aria-label={`Decrease ${product.name}`}
+                aria-label={t("decrease", { name: product.name })}
               >
                 <Minus className="size-4" />
               </Button>
@@ -186,7 +195,7 @@ export function ProductDetailScreen() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setQuantity((current) => current + 1)}
-                aria-label={`Increase ${product.name}`}
+                aria-label={t("increase", { name: product.name })}
               >
                 <Plus className="size-4" />
               </Button>
@@ -195,11 +204,9 @@ export function ProductDetailScreen() {
             <Button
               type="button"
               className={appOutlineButtonClassName}
-              onClick={() =>
-                toast.info("Add to cart coming soon.")
-              }
+              onClick={() => toast.info(t("addToCartSoon"))}
             >
-              Add to cart
+              {t("addToCart")}
             </Button>
           </CardFooter>
         </Card>
@@ -209,7 +216,7 @@ export function ProductDetailScreen() {
           variant="link"
           className={`mt-6 ${appBackLinkClassName}`}
         >
-          <Link href="/products">Back</Link>
+          <Link href="/products">{tCommon("back")}</Link>
         </Button>
       </div>
     </AppScreenShell>

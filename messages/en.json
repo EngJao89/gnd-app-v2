@@ -1,0 +1,216 @@
+{
+  "Metadata": {
+    "title": "Groceries Next Door",
+    "description": "Your neighborhood grocery delivery app"
+  },
+  "Common": {
+    "back": "Back",
+    "backToProducts": "Back to products",
+    "main": "Main",
+    "submit": "Submit",
+    "noImage": "No image",
+    "location": "Belmore, Sydney",
+    "networkError": "Could not connect to the server. Please try again.",
+    "logoAlt": "Groceries Next Door"
+  },
+  "LocaleSwitcher": {
+    "label": "Language",
+    "pt": "Português",
+    "en": "English"
+  },
+  "Landing": {
+    "signIn": "Sign in",
+    "registerClient": "Register Client",
+    "registerStore": "Register Store",
+    "storeSignIn": "Store Sign in",
+    "continueWithoutRegistration": "Continue without Registration"
+  },
+  "SignIn": {
+    "email": "Email",
+    "password": "Password",
+    "rememberMe": "Remember me",
+    "emailPlaceholder": "user@email.com",
+    "logIn": "Log in",
+    "loggingIn": "Logging in...",
+    "success": "Login successful!",
+    "invalidCredentials": "Invalid email or password."
+  },
+  "Register": {
+    "firstName": "First Name",
+    "surname": "Surname",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone number",
+    "emailPlaceholder": "user@email.com",
+    "phonePlaceholder": "+61",
+    "submit": "Register Client",
+    "submitting": "Registering...",
+    "success": "Account created successfully!",
+    "error": "Failed to register. Please try again."
+  },
+  "StoreSignIn": {
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "store@email.com",
+    "logIn": "Log in",
+    "loggingIn": "Logging in...",
+    "success": "Store login successful!",
+    "invalidCredentials": "Invalid email or password."
+  },
+  "StoreRegister": {
+    "title": "Register Store",
+    "subtitle": "Fill in the store details below.",
+    "name": "Store name",
+    "legalName": "Legal name",
+    "cnpj": "CNPJ",
+    "ownerName": "Owner name",
+    "street": "Street",
+    "numberOrBlock": "Number or block",
+    "neighborhood": "Neighborhood",
+    "city": "City",
+    "state": "State",
+    "zipCode": "Zip code",
+    "placeholders": {
+      "name": "GND Downtown Store",
+      "legalName": "GND Commerce Ltd",
+      "cnpj": "12.345.678/0001-90",
+      "ownerName": "Maria Silva",
+      "street": "Flower Street",
+      "numberOrBlock": "123",
+      "neighborhood": "Downtown",
+      "city": "São Paulo",
+      "state": "SP",
+      "zipCode": "01310-100"
+    },
+    "submit": "Register Store",
+    "submitting": "Registering...",
+    "success": "Store registered successfully!",
+    "error": "Failed to register store. Please try again."
+  },
+  "Guest": {
+    "qrCode": "QR-Code",
+    "enterWithKeyboard": "Enter with keyboard"
+  },
+  "QrCode": {
+    "instruction": "Point your camera to QR-Code"
+  },
+  "EnterCode": {
+    "instruction": "Enter code below",
+    "code": "Code"
+  },
+  "Products": {
+    "search": "Search products",
+    "scanBarcode": "Scan with barcode",
+    "emptySearch": "No products match your search.",
+    "empty": "No products available yet.",
+    "loadError": "Failed to load products. Please try again."
+  },
+  "ProductDetail": {
+    "notFound": "Product not found.",
+    "productDetails": "Product details",
+    "description": "Description",
+    "store": "Store",
+    "addToCart": "Add to cart",
+    "addToCartSoon": "Add to cart coming soon.",
+    "loadError": "Failed to load product details.",
+    "decrease": "Decrease {name}",
+    "increase": "Increase {name}"
+  },
+  "AddProduct": {
+    "title": "Add Product",
+    "subtitle": "Fill in the product details below.",
+    "name": "Name",
+    "price": "Price",
+    "description": "Description",
+    "brand": "Brand",
+    "sector": "Sector",
+    "image": "Image",
+    "placeholders": {
+      "name": "GND T-Shirt",
+      "price": "99.90",
+      "description": "100% cotton t-shirt",
+      "brand": "GND",
+      "sector": "Apparel"
+    },
+    "imageRequired": "Image is required",
+    "submit": "Add product",
+    "submitting": "Adding...",
+    "success": "Product added successfully!",
+    "error": "Failed to add product. Please try again."
+  },
+  "Cart": {
+    "empty": "Your cart is empty",
+    "total": "Total:",
+    "applePay": "Apple Pay",
+    "bpay": "BPAY",
+    "debitCredit": "Debit/Credit"
+  },
+  "StoreProfile": {
+    "title": "Store profile",
+    "subtitle": "Account details for your store.",
+    "cnpj": "CNPJ",
+    "owner": "Owner",
+    "email": "Email",
+    "address": "Address",
+    "cep": "ZIP {zipCode}",
+    "viewProducts": "View products",
+    "hideProducts": "Hide products",
+    "noProducts": "No products registered for this store yet.",
+    "logOut": "Log out",
+    "loadError": "Failed to load store profile.",
+    "productsLoadError": "Failed to load store products.",
+    "loggedOut": "Logged out successfully!"
+  },
+  "Header": {
+    "addProduct": "Add product",
+    "storeProfile": "Store profile",
+    "openCart": "Open cart",
+    "logOut": "Log out",
+    "loggedOut": "Logged out successfully!"
+  },
+  "ProductCard": {
+    "view": "View {name}",
+    "decrease": "Decrease {name}",
+    "increase": "Increase {name}",
+    "outOfStock": "Out of stock?"
+  },
+  "Success": {
+    "title": "Success!",
+    "message": "We are closer than it seems"
+  },
+  "Form": {
+    "filePreview": "File preview"
+  },
+  "Validation": {
+    "invalidEmail": "Invalid email",
+    "passwordRequired": "Password is required",
+    "firstNameRequired": "First name is required",
+    "surnameRequired": "Surname is required",
+    "passwordMin": "Password must be at least 6 characters",
+    "phoneRequired": "Phone number is required",
+    "storeNameRequired": "Store name is required",
+    "legalNameRequired": "Legal name is required",
+    "cnpjRequired": "CNPJ is required",
+    "ownerNameRequired": "Owner name is required",
+    "streetRequired": "Street is required",
+    "numberOrBlockRequired": "Number or block is required",
+    "neighborhoodRequired": "Neighborhood is required",
+    "cityRequired": "City is required",
+    "stateRequired": "State is required",
+    "stateMax": "State must be 2 characters",
+    "zipCodeRequired": "Zip code is required",
+    "imageRequired": "Image is required",
+    "productNameRequired": "Product name is required",
+    "priceRequired": "Price is required",
+    "pricePositive": "Price must be greater than zero",
+    "descriptionRequired": "Description is required",
+    "brandRequired": "Brand is required",
+    "sectorRequired": "Sector is required"
+  },
+  "StoreSession": {
+    "expired": "Store session expired. Please sign in again.",
+    "onlyStores": "Only stores can add products.",
+    "signInRequired": "Please sign in as a store to continue.",
+    "verifyError": "Could not verify store session. Please try again."
+  }
+}

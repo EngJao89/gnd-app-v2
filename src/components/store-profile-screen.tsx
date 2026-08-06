@@ -1,8 +1,7 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { Building2, Mail, MapPin, User } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 
@@ -18,6 +17,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Link, useRouter } from "@/i18n/navigation"
 import { getApiErrorMessage } from "@/lib/api-error"
 import { appBackLinkClassName, appOutlineButtonClassName } from "@/lib/app-styles"
 import type { Product } from "@/types/product"
@@ -26,19 +26,9 @@ import { signOut } from "@/services/auth"
 import { getProductsByStoreId } from "@/services/products"
 import { getStoreMe } from "@/services/store-auth"
 
-function formatAddress(store: Store) {
-  const streetLine = [store.street, store.numberOrBlock]
-    .filter(Boolean)
-    .join(", ")
-  const cityLine = [store.neighborhood, store.city, store.state]
-    .filter(Boolean)
-    .join(" · ")
-  const zipLine = store.zipCode ? `CEP ${store.zipCode}` : null
-
-  return [streetLine, cityLine, zipLine].filter(Boolean)
-}
-
 export function StoreProfileScreen() {
+  const t = useTranslations("StoreProfile")
+  const tCommon = useTranslations("Common")
   const router = useRouter()
   const isAuthorized = useRequireStoreSession()
   const [store, setStore] = useState<Store | null>(null)
@@ -67,7 +57,11 @@ export function StoreProfileScreen() {
       } catch (error) {
         if (isMounted) {
           toast.error(
-            getApiErrorMessage(error, "Failed to load store profile.")
+            getApiErrorMessage(
+              error,
+              t("loadError"),
+              tCommon("networkError")
+            )
           )
           router.replace("/stores/sign-in")
         }
@@ -83,7 +77,7 @@ export function StoreProfileScreen() {
     return () => {
       isMounted = false
     }
-  }, [isAuthorized, router])
+  }, [isAuthorized, router, t, tCommon])
 
   async function handleToggleProducts() {
     if (showProducts) {
@@ -104,7 +98,13 @@ export function StoreProfileScreen() {
       setProducts(data)
       setHasLoadedProducts(true)
     } catch (error) {
-      toast.error(getApiErrorMessage(error, "Failed to load store products."))
+      toast.error(
+        getApiErrorMessage(
+          error,
+          t("productsLoadError"),
+          tCommon("networkError")
+        )
+      )
       setShowProducts(false)
     } finally {
       setIsLoadingProducts(false)
@@ -113,8 +113,22 @@ export function StoreProfileScreen() {
 
   function handleLogout() {
     signOut()
-    toast.success("Logged out successfully!")
+    toast.success(t("loggedOut"))
     router.push("/")
+  }
+
+  function formatAddress(storeData: Store) {
+    const streetLine = [storeData.street, storeData.numberOrBlock]
+      .filter(Boolean)
+      .join(", ")
+    const cityLine = [storeData.neighborhood, storeData.city, storeData.state]
+      .filter(Boolean)
+      .join(" · ")
+    const zipLine = storeData.zipCode
+      ? t("cep", { zipCode: storeData.zipCode })
+      : null
+
+    return [streetLine, cityLine, zipLine].filter(Boolean)
   }
 
   if (!isAuthorized) {
@@ -138,10 +152,8 @@ export function StoreProfileScreen() {
   return (
     <AppScreenShell showAddProduct showStoreProfile showLogout>
       <div className="flex flex-1 flex-col px-6 pb-10 pt-6">
-        <h1 className="text-xl font-bold text-foreground">Store profile</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Account details for your store.
-        </p>
+        <h1 className="text-xl font-bold text-foreground">{t("title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("subtitle")}</p>
 
         <Card className="mt-6 shadow-sm">
           <CardHeader>
@@ -155,7 +167,7 @@ export function StoreProfileScreen() {
           <CardContent className="space-y-4">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                CNPJ
+                {t("cnpj")}
               </p>
               <p className="mt-1 text-sm text-foreground">{store.cnpj}</p>
             </div>
@@ -163,7 +175,7 @@ export function StoreProfileScreen() {
             <div>
               <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 <User className="size-3.5" aria-hidden />
-                Owner
+                {t("owner")}
               </p>
               <p className="mt-1 text-sm text-foreground">{store.ownerName}</p>
             </div>
@@ -172,7 +184,7 @@ export function StoreProfileScreen() {
               <div>
                 <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   <Mail className="size-3.5" aria-hidden />
-                  Email
+                  {t("email")}
                 </p>
                 <p className="mt-1 text-sm text-foreground">{store.email}</p>
               </div>
@@ -184,7 +196,7 @@ export function StoreProfileScreen() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-base">
               <MapPin className="size-4 text-brand" aria-hidden />
-              Address
+              {t("address")}
             </CardTitle>
           </CardHeader>
 
@@ -204,7 +216,7 @@ export function StoreProfileScreen() {
             onClick={handleToggleProducts}
             aria-expanded={showProducts}
           >
-            {showProducts ? "Hide products" : "View products"}
+            {showProducts ? t("hideProducts") : t("viewProducts")}
           </Button>
 
           {showProducts ? (
@@ -219,7 +231,7 @@ export function StoreProfileScreen() {
                 ))
               ) : (
                 <p className="py-4 text-center text-sm text-muted-foreground">
-                  No products registered for this store yet.
+                  {t("noProducts")}
                 </p>
               )}
             </div>
@@ -231,11 +243,11 @@ export function StoreProfileScreen() {
             className="h-11"
             onClick={handleLogout}
           >
-            Log out
+            {t("logOut")}
           </Button>
 
           <Button asChild variant="link" className={appBackLinkClassName}>
-            <Link href="/products">Back</Link>
+            <Link href="/products">{tCommon("back")}</Link>
           </Button>
         </div>
       </div>

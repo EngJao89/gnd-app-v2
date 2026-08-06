@@ -1,7 +1,7 @@
 "use client"
 
-import Link from "next/link"
 import { ImageIcon } from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 import {
@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Link } from "@/i18n/navigation"
 import { getProductImageUrl } from "@/lib/api-url"
 import type { Product } from "@/types/product"
 
@@ -23,6 +24,7 @@ function formatPrice(price: number) {
 }
 
 export function StoreProductCard({ product }: StoreProductCardProps) {
+  const tCommon = useTranslations("Common")
   const [hasImageError, setHasImageError] = useState(false)
   const imageUrl = getProductImageUrl(product.imageUrl)
 
@@ -42,7 +44,9 @@ export function StoreProductCard({ product }: StoreProductCardProps) {
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center gap-1 px-2 text-center text-muted-foreground">
                 <ImageIcon className="size-5" aria-hidden />
-                <span className="text-[10px] leading-tight">No image</span>
+                <span className="text-[10px] leading-tight">
+                  {tCommon("noImage")}
+                </span>
               </div>
             )}
           </div>

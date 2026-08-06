@@ -1,8 +1,14 @@
 import { z } from "zod"
 
-export const storeSignInSchema = z.object({
-  email: z.email("Invalid email"),
-  password: z.string().min(1, "Password is required"),
-})
+type Translate = (key: string) => string
 
-export type StoreSignInFormData = z.infer<typeof storeSignInSchema>
+export function createStoreSignInSchema(t: Translate) {
+  return z.object({
+    email: z.email(t("invalidEmail")),
+    password: z.string().min(1, t("passwordRequired")),
+  })
+}
+
+export type StoreSignInFormData = z.infer<
+  ReturnType<typeof createStoreSignInSchema>
+>

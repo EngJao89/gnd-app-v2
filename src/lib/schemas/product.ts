@@ -1,21 +1,25 @@
 import { z } from "zod"
 
-const imageFileSchema = z
-  .custom<FileList>((value) => value instanceof FileList, "Image is required")
-  .refine((files) => files.length > 0, "Image is required")
+type Translate = (key: string) => string
 
-export const productSchema = z.object({
-  name: z.string().min(1, "Product name is required"),
-  price: z
-    .string()
-    .min(1, "Price is required")
-    .refine((value) => !Number.isNaN(Number(value)) && Number(value) > 0, {
-      message: "Price must be greater than zero",
-    }),
-  description: z.string().min(1, "Description is required"),
-  brand: z.string().min(1, "Brand is required"),
-  sector: z.string().min(1, "Sector is required"),
-  image: imageFileSchema,
-})
+export function createProductSchema(t: Translate) {
+  const imageFileSchema = z
+    .custom<FileList>((value) => value instanceof FileList, t("imageRequired"))
+    .refine((files) => files.length > 0, t("imageRequired"))
 
-export type ProductFormData = z.infer<typeof productSchema>
+  return z.object({
+    name: z.string().min(1, t("productNameRequired")),
+    price: z
+      .string()
+      .min(1, t("priceRequired"))
+      .refine((value) => !Number.isNaN(Number(value)) && Number(value) > 0, {
+        message: t("pricePositive"),
+      }),
+    description: z.string().min(1, t("descriptionRequired")),
+    brand: z.string().min(1, t("brandRequired")),
+    sector: z.string().min(1, t("sectorRequired")),
+    image: imageFileSchema,
+  })
+}
+
+export type ProductFormData = z.infer<ReturnType<typeof createProductSchema>>

@@ -2,8 +2,8 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { isAxiosError } from "axios"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
+import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-toastify"
 
@@ -17,18 +17,27 @@ import {
 } from "@/components/form/form-field-input"
 import { Button } from "@/components/ui/button"
 import { FieldGroup } from "@/components/ui/field"
+import { Link, useRouter } from "@/i18n/navigation"
 import { getApiErrorMessage } from "@/lib/api-error"
 import {
   appBackLinkClassName,
   appFormInputClassName,
   appFormRootErrorClassName,
 } from "@/lib/app-styles"
-import { type ProductFormData, productSchema } from "@/lib/schemas/product"
+import { type ProductFormData, createProductSchema } from "@/lib/schemas/product"
 import { createProduct } from "@/services/products"
 
 export function AddProductScreen() {
+  const t = useTranslations("AddProduct")
+  const tValidation = useTranslations("Validation")
+  const tCommon = useTranslations("Common")
   const router = useRouter()
   const isAuthorized = useRequireStoreSession()
+
+  const productSchema = useMemo(
+    () => createProductSchema(tValidation),
+    [tValidation]
+  )
 
   const form = useForm<ProductFormData>({
     resolver: zodResolver(productSchema),
@@ -51,7 +60,7 @@ export function AddProductScreen() {
     const image = data.image[0]
 
     if (!image) {
-      form.setError("image", { message: "Image is required" })
+      form.setError("image", { message: t("imageRequired") })
       return
     }
 
@@ -64,12 +73,13 @@ export function AddProductScreen() {
         sector: data.sector,
         image,
       })
-      toast.success("Product added successfully!")
+      toast.success(t("success"))
       router.push("/products")
     } catch (error) {
       const message = getApiErrorMessage(
         error,
-        "Failed to add product. Please try again."
+        t("error"),
+        tCommon("networkError")
       )
 
       form.setError("root", { message })
@@ -92,18 +102,16 @@ export function AddProductScreen() {
         onSubmit={handleSubmit(onSubmit)}
         noValidate
       >
-        <h1 className="text-xl font-bold text-foreground">Add Product</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Fill in the product details below.
-        </p>
+        <h1 className="text-xl font-bold text-foreground">{t("title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("subtitle")}</p>
 
         <FieldGroup className="mt-6">
           <FormFieldInput
             control={control}
             name="name"
             id="name"
-            label="Name"
-            placeholder="Camiseta GND"
+            label={t("name")}
+            placeholder={t("placeholders.name")}
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
@@ -112,9 +120,9 @@ export function AddProductScreen() {
             control={control}
             name="price"
             id="price"
-            label="Price"
+            label={t("price")}
             type="number"
-            placeholder="99.90"
+            placeholder={t("placeholders.price")}
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
@@ -123,8 +131,8 @@ export function AddProductScreen() {
             control={control}
             name="description"
             id="description"
-            label="Description"
-            placeholder="Camiseta 100% algodão"
+            label={t("description")}
+            placeholder={t("placeholders.description")}
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
@@ -133,8 +141,8 @@ export function AddProductScreen() {
             control={control}
             name="brand"
             id="brand"
-            label="Brand"
-            placeholder="GND"
+            label={t("brand")}
+            placeholder={t("placeholders.brand")}
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
@@ -143,8 +151,8 @@ export function AddProductScreen() {
             control={control}
             name="sector"
             id="sector"
-            label="Sector"
-            placeholder="Vestuário"
+            label={t("sector")}
+            placeholder={t("placeholders.sector")}
             disabled={isSubmitting}
             inputClassName={appFormInputClassName}
           />
@@ -153,7 +161,7 @@ export function AddProductScreen() {
             control={control}
             name="image"
             id="image"
-            label="Image"
+            label={t("image")}
             accept="image/*"
             showImagePreview
             disabled={isSubmitting}
@@ -168,11 +176,11 @@ export function AddProductScreen() {
 
         <div className="mt-8 flex flex-col gap-4">
           <Button type="submit" disabled={isSubmitting} className="h-11">
-            {isSubmitting ? "Adding..." : "Add product"}
+            {isSubmitting ? t("submitting") : t("submit")}
           </Button>
 
           <Button asChild variant="link" className={appBackLinkClassName}>
-            <Link href="/products">Back</Link>
+            <Link href="/products">{tCommon("back")}</Link>
           </Button>
         </div>
       </form>

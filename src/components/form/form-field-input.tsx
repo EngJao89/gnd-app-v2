@@ -1,5 +1,6 @@
 "use client"
 
+import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import {
   Controller,
@@ -152,6 +153,7 @@ export function FormFieldFile<T extends FieldValues>({
   inputClassName,
   errorClassName,
 }: FormFieldFileProps<T>) {
+  const t = useTranslations("Form")
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
   useEffect(() => {
@@ -198,7 +200,7 @@ export function FormFieldFile<T extends FieldValues>({
               className="mt-2 size-24 rounded-lg border border-border bg-cover bg-center"
               style={{ backgroundImage: `url(${previewUrl})` }}
               role="img"
-              aria-label="File preview"
+              aria-label={t("filePreview")}
             />
           ) : null}
           {fieldState.invalid ? (

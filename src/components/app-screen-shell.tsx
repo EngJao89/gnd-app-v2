@@ -1,18 +1,23 @@
+import type { ComponentProps } from "react"
+
 import { AppHeader } from "@/components/app-header"
+import { Link } from "@/i18n/navigation"
 import { cn } from "@/lib/utils"
+
+type Href = ComponentProps<typeof Link>["href"]
 
 type AppScreenShellProps = {
   children: React.ReactNode
   className?: string
   location?: string
   showAddProduct?: boolean
-  addProductHref?: string
+  addProductHref?: Href
   showStoreProfile?: boolean
-  storeProfileHref?: string
+  storeProfileHref?: Href
   showCartIcon?: boolean
   showCartBadge?: boolean
   showLogout?: boolean
-  cartHref?: string
+  cartHref?: Href
 }
 
 export function AppScreenShell({

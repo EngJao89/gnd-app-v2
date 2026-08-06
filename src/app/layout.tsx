@@ -1,37 +1,9 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { ReactNode } from "react"
 
-import { ToastProvider } from "@/components/toast-provider";
-import "./globals.css";
+type Props = {
+  children: ReactNode
+}
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Groceries Next Door",
-  description: "Your neighborhood grocery delivery app",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-svh antialiased`}
-      >
-        {children}
-        <ToastProvider />
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: Props) {
+  return children
 }
