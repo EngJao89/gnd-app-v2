@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { ImageIcon, Minus, Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useParams } from "next/navigation"
@@ -120,10 +121,12 @@ export function ProductDetailScreen() {
         <Card className="overflow-hidden py-0 shadow-sm">
           <div className="relative aspect-square w-full overflow-hidden bg-muted">
             {imageUrl && !hasImageError ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={product.name}
-                className="h-full w-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 480px"
+                className="object-cover"
                 onError={() => setHasImageError(true)}
               />
             ) : (

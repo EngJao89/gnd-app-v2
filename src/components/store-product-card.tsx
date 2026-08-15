@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { ImageIcon } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
@@ -23,7 +24,9 @@ function formatPrice(price: number) {
   return price % 1 === 0 ? `$${price}` : `$${price.toFixed(2)}`
 }
 
-export function StoreProductCard({ product }: StoreProductCardProps) {
+export function StoreProductCard({
+  product,
+}: Readonly<StoreProductCardProps>) {
   const tCommon = useTranslations("Common")
   const [hasImageError, setHasImageError] = useState(false)
   const imageUrl = getProductImageUrl(product.imageUrl)
@@ -32,13 +35,14 @@ export function StoreProductCard({ product }: StoreProductCardProps) {
     <Link href={`/products/${product.id}`} className="block">
       <Card className="flex-row gap-0 overflow-hidden py-0 shadow-sm transition-shadow hover:shadow-md">
         <div className="relative w-24 shrink-0 overflow-hidden bg-muted">
-          <div className="aspect-square">
+          <div className="relative aspect-square">
             {imageUrl && !hasImageError ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={product.name}
-                className="h-full w-full object-cover"
-                loading="lazy"
+                fill
+                sizes="96px"
+                className="object-cover"
                 onError={() => setHasImageError(true)}
               />
             ) : (

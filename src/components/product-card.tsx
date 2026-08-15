@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { ImageIcon, Minus, Plus } from "lucide-react"
 import { useTranslations } from "next-intl"
 import { useState } from "react"
@@ -32,7 +33,7 @@ export function ProductCard({
   product,
   quantity,
   onQuantityChange,
-}: ProductCardProps) {
+}: Readonly<ProductCardProps>) {
   const t = useTranslations("ProductCard")
   const tCommon = useTranslations("Common")
   const [hasImageError, setHasImageError] = useState(false)
@@ -47,11 +48,12 @@ export function ProductCard({
           aria-label={t("view", { name: product.name })}
         >
           {imageUrl && !hasImageError ? (
-            <img
+            <Image
               src={imageUrl}
               alt={product.name}
-              className="h-full w-full object-cover"
-              loading="lazy"
+              fill
+              sizes="96px"
+              className="object-cover"
               onError={() => setHasImageError(true)}
             />
           ) : (
